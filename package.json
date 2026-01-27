@@ -2,7 +2,7 @@
   "name": "mdc-syntax",
   "type": "module",
   "version": "0.0.1",
-  "packageManager": "pnpm@10.28.1",
+  "packageManager": "pnpm@10.28.2",
   "description": "",
   "author": "",
   "license": "MIT",
@@ -15,7 +15,7 @@
   },
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.mts",
   "files": [
     "dist"
   ],
@@ -24,7 +24,7 @@
     "dev:prepare": "nuxt prepare playground",
     "docs": "nuxt dev --extends docus docs",
     "test": "vitest run",
-    "prepack": "unbuild",
+    "prepack": "onbuild",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "verify": "pnpm run lint && pnpm run test && pnpm run typecheck"
@@ -35,7 +35,7 @@
   "dependencies": {
     "github-slugger": "^2.0.0",
     "markdown-it": "^14.1.0",
-    "markdown-it-mdc": "^0.2.6",
+    "markdown-it-mdc": "^0.2.8",
     "markdown-it-sub": "^2.0.0",
     "minimark": "https://pkg.pr.new/minimark@1484201",
     "remark-mdc": "^3.10.0",
@@ -43,16 +43,16 @@
     "unified": "^11.0.5"
   },
   "devDependencies": {
-    "@nuxt/eslint-config": "^1.12.1",
+    "@nuxt/eslint-config": "^1.13.0",
     "@types/node": "^25.0.10",
     "eslint": "^9.39.2",
     "hast-util-to-string": "^3.0.1",
     "nuxt": "^4.3.0",
+    "obuild": "^0.4.22",
     "remark-gfm": "^4.0.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
     "typescript": "^5.9.3",
-    "unbuild": "^3.6.1",
     "vitest": "^4.0.18"
   }
 }
