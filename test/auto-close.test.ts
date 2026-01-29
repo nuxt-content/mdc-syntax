@@ -109,14 +109,37 @@ describe('autoCloseMarkdown - MDC Components', () => {
     const expected = '* not an italic'
     expect(autoCloseMarkdown(input)).toBe(expected)
   })
+
   it('valid italic syntax', () => {
     const input = '*italic'
     const expected = '*italic*'
     expect(autoCloseMarkdown(input)).toBe(expected)
   })
+
   it('should handle strong in italic', () => {
     const input = '***strong italic'
     const expected = '***strong italic***'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+
+  it('should ignore trailing space in italic', () => {
+    const input = '*italic '
+    const expected = '*italic*'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+  it('should ignore trailing space in bold', () => {
+    const input = '**bold '
+    const expected = '**bold**'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+  it('should ignore trailing space in strikethrough', () => {
+    const input = '~~strikethrough '
+    const expected = '~~strikethrough~~'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+  it('should ignore trailing space in code', () => {
+    const input = '`code '
+    const expected = '`code `'
     expect(autoCloseMarkdown(input)).toBe(expected)
   })
 })

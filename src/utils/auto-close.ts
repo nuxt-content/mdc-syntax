@@ -53,6 +53,7 @@ function autoCloseInlineSyntax(markdown: string): string {
   ]
 
   let closingSuffix = ''
+  let trimTrailing = false
 
   // Check each marker
   for (const { marker, pattern } of markers) {
@@ -64,10 +65,20 @@ function autoCloseInlineSyntax(markdown: string): string {
 
       // If odd number of markers, we have an unclosed one
       if (count % 2 === 1) {
+        // Check if content ends with whitespace before we close
+        // But preserve whitespace for inline code (spaces are significant in code)
+        if (marker !== '`' && /\s+$/.test(lastLine)) {
+          trimTrailing = true
+        }
         closingSuffix += marker
         break // Only close the first unclosed marker
       }
     }
+  }
+
+  // If we need to close and there's trailing whitespace, trim it first
+  if (closingSuffix && trimTrailing) {
+    return markdown.trimEnd() + closingSuffix
   }
 
   return markdown + closingSuffix
