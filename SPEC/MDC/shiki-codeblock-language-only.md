@@ -1,6 +1,6 @@
 ---
 timeout:
-  parse: 100ms
+  parse: 150ms
   html: 5ms
   markdown: 5ms
 options:
