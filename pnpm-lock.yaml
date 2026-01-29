@@ -16,6 +16,9 @@ importers:
       markdown-it:
         specifier: ^14.1.0
         version: 14.1.0
+      markdown-it-mdc:
+        specifier: ^0.2.8
+        version: 0.2.8(patch_hash=7344102ef20260b8a21d26ebab2fa94fd01ea8e31cc68f051f81754d63ea9b6e)(@types/markdown-it@14.1.2)(markdown-it@14.1.0)
       remark-mdc:
         specifier: ^3.10.0
         version: 3.10.0
@@ -41,9 +44,6 @@ importers:
       hast-util-to-string:
         specifier: ^3.0.1
         version: 3.0.1
-      markdown-it-mdc:
-        specifier: ^0.2.8
-        version: 0.2.8(patch_hash=7344102ef20260b8a21d26ebab2fa94fd01ea8e31cc68f051f81754d63ea9b6e)(@types/markdown-it@14.1.2)(markdown-it@14.1.0)
       markdown-it-sub:
         specifier: ^2.0.0
         version: 2.0.0

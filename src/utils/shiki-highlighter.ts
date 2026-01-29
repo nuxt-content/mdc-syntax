@@ -172,7 +172,7 @@ export async function highlightCodeBlocks(
             // Build pre attributes with Shiki styling
             const newPreAttrs: any = {
               ...attrs,
-              class: `shiki ${options.theme || 'github-dark'}`,
+              class: `shiki ${options.themes?.light || 'github-dark'}`,
               tabindex: '0',
             }
 
