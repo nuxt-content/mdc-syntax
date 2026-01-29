@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 | Left-aligned | Center-aligned | Right-aligned |
@@ -145,7 +145,3 @@ timeout:
 | git status   | git status     | git status    |
 | git diff     | git diff       | git diff      |
 ```
-
-
-
-

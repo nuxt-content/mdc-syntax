@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 ::component
@@ -85,4 +85,3 @@ First Paragraph
 Second Paragraph
 ::
 ```
-

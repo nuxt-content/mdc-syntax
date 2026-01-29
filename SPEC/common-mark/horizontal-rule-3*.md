@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 ***
@@ -36,4 +36,3 @@ timeout:
 ```md
 ---
 ```
-

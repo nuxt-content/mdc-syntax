@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 Here [link]{bool} [link]{#id1} [link]{.class1} [link]{attr="value"}

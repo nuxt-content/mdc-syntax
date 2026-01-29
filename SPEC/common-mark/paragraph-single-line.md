@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 This is a simple paragraph
@@ -37,4 +37,3 @@ This is a simple paragraph
 ```md
 This is a simple paragraph
 ```
-

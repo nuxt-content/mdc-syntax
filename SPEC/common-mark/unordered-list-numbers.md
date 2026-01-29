@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 - 1968\. A great year!
@@ -51,4 +51,3 @@ timeout:
 - 1968\. A great year!
 - I think 1969 was second best.
 ```
-

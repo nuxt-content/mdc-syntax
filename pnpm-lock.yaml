@@ -13,6 +13,9 @@ importers:
 
   .:
     dependencies:
+      shiki:
+        specifier: ^3.21.0
+        version: 3.21.0
       vue:
         specifier: ^3.5.27
         version: 3.5.27(typescript@5.9.3)
@@ -42,8 +45,8 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0
       minimark:
-        specifier: https://pkg.pr.new/minimark@c68ddf8
-        version: https://pkg.pr.new/minimark@c68ddf8
+        specifier: https://pkg.pr.new/minimark@9df41a4
+        version: https://pkg.pr.new/minimark@9df41a4
       nuxt:
         specifier: ^4.3.0
         version: 4.3.0(@parcel/watcher@2.5.4)(@types/node@25.0.10)(@vue/compiler-sfc@3.5.27)(better-sqlite3@12.6.2)(cac@6.7.14)(db0@0.3.4(better-sqlite3@12.6.2))(eslint@9.39.2(jiti@2.6.1))(ioredis@5.9.2)(lightningcss@1.31.1)(magicast@0.5.1)(optionator@0.9.4)(rolldown@1.0.0-rc.1)(rollup@4.55.1)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.10)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.4(typescript@5.9.3))(yaml@2.8.2)
@@ -4030,6 +4033,10 @@ packages:
     resolution: {integrity: sha512-FDWG5cmEYf2Z00IkYRhbFrwIwvdFKH07uV8dvNy0omp/Qb1xcyCWp2UDtcwJF4QZZvk0sLudP6/hAu42TaqVhQ==}
     engines: {node: '>=0.12'}
 
+  entities@7.0.1:
+    resolution: {integrity: sha512-TWrgLOFUQTH994YUyl1yT4uyavY5nNB5muff+RtWaqNVCAK408b5ZnnbNAUEWLTCpum9w6arT70i1XdQ4UeOPA==}
+    engines: {node: '>=0.12'}
+
   error-stack-parser-es@1.0.5:
     resolution: {integrity: sha512-5qucVt2XcuGMcEGgWI7i+yZpmpByQ8J1lHhcL7PwqCwu9FPP3VUXzT4ltHe5i2z9dePwEHcDVOAfSnHsOlCXRA==}
 
@@ -5401,8 +5408,8 @@ packages:
   minimark@0.2.0:
     resolution: {integrity: sha512-AmtWU9pO0C2/3AM2pikaVhJ//8E5rOpJ7+ioFQfjIq+wCsBeuZoxPd97hBFZ9qrI7DMHZudwGH3r8A7BMnsIew==}
 
-  minimark@https://pkg.pr.new/minimark@c68ddf8:
-    resolution: {integrity: sha512-ovhzNGc8eL/yfg8Tij3hPTxMcTNKvyPN2MxOwD/8qI4WBQYdYXs+6QGdw9+3TBTK4mQuiV9zbTOZaeXaW0knfw==, tarball: https://pkg.pr.new/minimark@c68ddf8}
+  minimark@https://pkg.pr.new/minimark@9df41a4:
+    resolution: {integrity: sha512-e5PE6/eGpWww/D+dW+kEITDzYUIT+H3acsqugjhAs0yPxtmYtnbekzTNo//gEPGZqNG/MO5IOVrc2jF1QNzyPQ==, tarball: https://pkg.pr.new/minimark@9df41a4}
     version: 0.2.0
 
   minimatch@10.1.1:
@@ -11521,6 +11528,8 @@ snapshots:
 
   entities@7.0.0: {}
 
+  entities@7.0.1: {}
+
   error-stack-parser-es@1.0.5: {}
 
   errx@0.1.0: {}
@@ -13270,8 +13279,9 @@ snapshots:
 
   minimark@0.2.0: {}
 
-  minimark@https://pkg.pr.new/minimark@c68ddf8:
+  minimark@https://pkg.pr.new/minimark@9df41a4:
     dependencies:
+      entities: 7.0.1
       js-yaml: 4.1.1
 
   minimatch@10.1.1:

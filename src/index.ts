@@ -15,14 +15,20 @@ export interface ParseResult {
   toc?: any
 }
 
+// Re-export MinimarkTree and MinimarkNode for convenience
+export type { MinimarkTree, MinimarkNode } from 'minimark'
+
 // Re-export auto-close utilities
 export { autoCloseMarkdown, detectUnclosedSyntax } from './utils/auto-close'
 
 // Re-export parse utilities
 export { applyAutoUnwrap } from './utils/auto-unwrap'
 
+// Re-export syntax highlighting utilities
+export { highlightCode } from './utils/shiki-highlighter'
+
 // Re-export types
-export type { ParseOptions } from './types'
+export type { ParseOptions, ShikiOptions } from './types'
 
 /**
  * Parse MDC content from a string
@@ -58,7 +64,15 @@ export type { ParseOptions } from './types'
  * ```
  */
 export function parse(source: string, options: ParseOptions = {}): ParseResult {
-  const { autoUnwrap = true } = options
+  const { autoUnwrap = true, highlight } = options
+
+  // Warn if highlight option is used with sync parse
+  if (highlight) {
+    console.warn(
+      'The "highlight" option requires async parsing. Use parseAsync() instead, or call highlightCodeBlocks() manually after parsing.',
+    )
+  }
+
   const { content, data } = parseFrontMatter(source)
 
   // Enable tables, GFM features
@@ -128,6 +142,50 @@ export function parse(source: string, options: ParseOptions = {}): ParseResult {
     data,
     toc,
   }
+}
+
+/**
+ * Parse MDC content from a string with optional syntax highlighting
+ *
+ * This is an async version of parse() that supports the `highlight` option
+ * to automatically apply Shiki syntax highlighting to code blocks.
+ *
+ * @param source - The markdown/MDC content as a string
+ * @param options - Parser options including highlight settings
+ * @returns Promise<ParseResult> - Object containing body, excerpt, data, and toc
+ *
+ * @example
+ * ```typescript
+ * import { parseAsync } from 'mdc-syntax'
+ *
+ * const content = `
+ * # Hello World
+ *
+ * \`\`\`javascript
+ * console.log("Hello!")
+ * \`\`\`
+ * `
+ *
+ * const result = await parseAsync(content, {
+ *   highlight: true,
+ *   shiki: { theme: 'github-dark' }
+ * })
+ * console.log(result.body)  // AST with syntax-highlighted code blocks
+ * ```
+ */
+export async function parseAsync(source: string, options: ParseOptions = {}): Promise<ParseResult> {
+  const { highlight = false, ...parseOptions } = options
+
+  // First, do the regular synchronous parse (without highlight option to avoid warning)
+  const result = parse(source, parseOptions)
+
+  // If highlighting is enabled, apply it to code blocks
+  if (highlight) {
+    const { highlightCodeBlocks } = await import('./utils/shiki-highlighter')
+    result.body = await highlightCodeBlocks(result.body, highlight === true ? {} : highlight)
+  }
+
+  return result
 }
 
 export function renderHTML(tree: MinimarkTree): string {

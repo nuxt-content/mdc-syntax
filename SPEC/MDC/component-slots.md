@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 ::component
@@ -28,7 +28,9 @@ Second Paragraph
       {},
       [
         "template",
-        { "name": "first" },
+        {
+          "name": "first"
+        },
         [
           "p",
           {},
@@ -37,7 +39,9 @@ Second Paragraph
       ],
       [
         "template",
-        { "name": "second" },
+        {
+          "name": "second"
+        },
         [
           "p",
           {},
@@ -73,4 +77,3 @@ First Paragraph
 Second Paragraph
 ::
 ```
-

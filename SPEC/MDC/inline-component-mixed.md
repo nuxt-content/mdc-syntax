@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 [:component[text]{.class}](/link)
@@ -32,7 +32,7 @@ timeout:
           "href": "/link"
         },
         [
-        "component",
+          "component",
           {
             "class": "class"
           },
@@ -125,4 +125,3 @@ timeout:
 
 [:component[text]{.class}]
 ```
-

@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { readdir, readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { parseFrontMatter } from 'remark-mdc'
-import { parse, renderHTML, renderMarkdown } from '../src/index'
+import { parseAsync, renderHTML, renderMarkdown } from '../src/index'
 
 interface TestCase {
   input: string
@@ -13,6 +13,9 @@ interface TestCase {
     parse?: number
     html?: number
     markdown?: number
+  }
+  options?: {
+    highlight?: boolean
   }
 }
 
@@ -26,7 +29,7 @@ function parseTimeout(timeoutStr: string): number {
   return unit === 's' ? value * 1000 : value
 }
 
-function extractFrontmatter(content: string): { timeouts?: TestCase['timeouts'], body: string } {
+function extractFrontmatter(content: string): { timeouts?: TestCase['timeouts'], body: string, options?: TestCase['options'] } {
   const { content: body, data } = parseFrontMatter(content)
 
   if (!data || Object.keys(data).length === 0) {
@@ -41,11 +44,15 @@ function extractFrontmatter(content: string): { timeouts?: TestCase['timeouts'],
     if (data.timeout.markdown) timeouts.markdown = parseTimeout(String(data.timeout.markdown))
   }
 
-  return { timeouts: Object.keys(timeouts).length > 0 ? timeouts : undefined, body }
+  return {
+    timeouts: Object.keys(timeouts).length > 0 ? timeouts : undefined,
+    options: data.options as TestCase['options'] | undefined,
+    body
+  }
 }
 
 function extractTestCase(content: string): TestCase {
-  const { timeouts, body } = extractFrontmatter(content)
+  const { timeouts, body, options } = extractFrontmatter(content)
   const sections: Record<string, string> = {}
 
   // Extract sections - find each section header and its content
@@ -99,11 +106,12 @@ function extractTestCase(content: string): TestCase {
   }
 
   return {
-    input: sections.input || '',
-    ast: sections.ast || '',
+    input: (sections.input || '').trim(),
+    ast: (sections.ast || ''),
     html: sections.html || '',
     markdown: sections.markdown || '',
     timeouts,
+    options,
   }
 }
 
@@ -147,11 +155,11 @@ describe('MDC Syntax Tests', () => {
 
   testCases.forEach(({ file, testCase }) => {
     describe(file, () => {
-      it('should parse input to AST', { timeout: testCase.timeouts?.parse ?? 5000 }, () => {
-        const result = parse(testCase.input, { autoUnwrap: false })
+      it('should parse input to AST', { timeout: testCase.timeouts?.parse ?? 5000 }, async () => {
+        // if (!file.includes('shiki-codeblock-highlight-complex')) return
+        const result = await parseAsync(testCase.input, { autoUnwrap: false, ...testCase.options })
         const expectedAST = JSON.parse(testCase.ast)
 
-        // Tests will fail until implementation is complete
         expect(result.body).toEqual(expectedAST)
       })
 

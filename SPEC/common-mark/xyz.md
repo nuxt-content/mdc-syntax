@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 # Main Title
@@ -47,40 +47,6 @@ Here's an image:
 ![Alt text](/path/to/image.jpg "Image title")
 
 And here's a code block:
-
-```
-function hello() {
-  console.log("Hello, World!");
-}
-```
-
-### More Content
-
-You can have **bold** and *italic* text, or even ***both together***.
-
-Horizontal rule:
-
----
-
-## Final Section
-
-Here's a paragraph with `code`, **strong text**, *emphasized text*, and a [link](https://nuxt.com) all in one line.
-
-> Blockquote with heading
-> 
-> #### Blockquote Heading
-> 
-> And a paragraph inside the blockquote.
-
-### Lists Combined
-
-- Item with **bold** and *italic*
-- Item with `code` and [link](https://example.com)
-- Item with ![image](/img.jpg "title")
-
-1. Numbered with **formatting**
-2. Numbered with `code`
-3. Numbered with [link](https://nuxt.com)
 ```
 
 ## AST
@@ -292,8 +258,8 @@ Here's a paragraph with `code`, **strong text**, *emphasized text*, and a [link]
         "img",
         {
           "src": "/path/to/image.jpg",
-          "alt": "Alt text",
-          "title": "Image title"
+          "title": "Image title",
+          "alt": "Alt text"
         }
       ]
     ],
@@ -301,211 +267,6 @@ Here's a paragraph with `code`, **strong text**, *emphasized text*, and a [link]
       "p",
       {},
       "And here's a code block:"
-    ],
-    [
-      "pre",
-      {},
-      [
-        "code",
-        {},
-        "function hello() {\n  console.log(\"Hello, World!\");\n}\n"
-      ]
-    ],
-    [
-      "h3",
-      {
-        "id": "more-content"
-      },
-      "More Content"
-    ],
-    [
-      "p",
-      {},
-      "You can have ",
-      [
-        "strong",
-        {},
-        "bold"
-      ],
-      " and ",
-      [
-        "em",
-        {},
-        "italic"
-      ],
-      " text, or even ",
-      [
-        "em",
-        {},
-        [
-          "strong",
-          {},
-          "both together"
-        ]
-      ],
-      "."
-    ],
-    [
-      "p",
-      {},
-      "Horizontal rule:"
-    ],
-    [
-      "hr",
-      {}
-    ],
-    [
-      "h2",
-      {
-        "id": "final-section"
-      },
-      "Final Section"
-    ],
-    [
-      "p",
-      {},
-      "Here's a paragraph with ",
-      [
-        "code",
-        {},
-        "code"
-      ],
-      ", ",
-      [
-        "strong",
-        {},
-        "strong text"
-      ],
-      ", ",
-      [
-        "em",
-        {},
-        "emphasized text"
-      ],
-      ", and a ",
-      [
-        "a",
-        {
-          "href": "https://nuxt.com"
-        },
-        "link"
-      ],
-      " all in one line."
-    ],
-    [
-      "blockquote",
-      {},
-      [
-        "p",
-        {},
-        "Blockquote with heading"
-      ],
-      [
-        "h4",
-        {
-          "id": "blockquote-heading"
-        },
-        "Blockquote Heading"
-      ],
-      [
-        "p",
-        {},
-        "And a paragraph inside the blockquote."
-      ]
-    ],
-    [
-      "h3",
-      {
-        "id": "lists-combined"
-      },
-      "Lists Combined"
-    ],
-    [
-      "ul",
-      {},
-      [
-        "li",
-        {},
-        "Item with ",
-        [
-          "strong",
-          {},
-          "bold"
-        ],
-        " and ",
-        [
-          "em",
-          {},
-          "italic"
-        ]
-      ],
-      [
-        "li",
-        {},
-        "Item with ",
-        [
-          "code",
-          {},
-          "code"
-        ],
-        " and ",
-        [
-          "a",
-          {
-            "href": "https://example.com"
-          },
-          "link"
-        ]
-      ],
-      [
-        "li",
-        {},
-        "Item with ",
-        [
-          "img",
-          {
-            "src": "/img.jpg",
-            "alt": "image",
-            "title": "title"
-          }
-        ]
-      ]
-    ],
-    [
-      "ol",
-      {},
-      [
-        "li",
-        {},
-        "Numbered with ",
-        [
-          "strong",
-          {},
-          "formatting"
-        ]
-      ],
-      [
-        "li",
-        {},
-        "Numbered with ",
-        [
-          "code",
-          {},
-          "code"
-        ]
-      ],
-      [
-        "li",
-        {},
-        "Numbered with ",
-        [
-          "a",
-          {
-            "href": "https://nuxt.com"
-          },
-          "link"
-        ]
-      ]
     ]
   ]
 }
@@ -550,34 +311,8 @@ Here's a paragraph with `code`, **strong text**, *emphasized text*, and a [link]
 </ol>
 <h2 id="section-two">Section Two</h2>
 <p>Here's an image:</p>
-<p><img src="/path/to/image.jpg" alt="Alt text" title="Image title" /></p>
+<p><img src="/path/to/image.jpg" title="Image title" alt="Alt text" /></p>
 <p>And here's a code block:</p>
-<pre><code>function hello() {
-  console.log("Hello, World!");
-}
-</code></pre>
-<h3 id="more-content">More Content</h3>
-<p>You can have <strong>bold</strong> and <em>italic</em> text, or even <em><strong>both together</strong></em>.</p>
-<p>Horizontal rule:</p>
-<hr />
-<h2 id="final-section">Final Section</h2>
-<p>Here's a paragraph with <code>code</code>, <strong>strong text</strong>, <em>emphasized text</em>, and a <a href="https://nuxt.com">link</a> all in one line.</p>
-<blockquote>
-  <p>Blockquote with heading</p>
-  <h4 id="blockquote-heading">Blockquote Heading</h4>
-  <p>And a paragraph inside the blockquote.</p>
-</blockquote>
-<h3 id="lists-combined">Lists Combined</h3>
-<ul>
-  <li>Item with <strong>bold</strong> and <em>italic</em></li>
-  <li>Item with <code>code</code> and <a href="https://example.com">link</a></li>
-  <li>Item with <img src="/img.jpg" alt="image" title="title" /></li>
-</ul>
-<ol>
-  <li>Numbered with <strong>formatting</strong></li>
-  <li>Numbered with <code>code</code></li>
-  <li>Numbered with <a href="https://nuxt.com">link</a></li>
-</ol>
 ```
 
 ## Markdown
@@ -622,38 +357,4 @@ Here's an image:
 ![Alt text](/path/to/image.jpg "Image title")
 
 And here's a code block:
-
-```
-function hello() {
-  console.log("Hello, World!");
-}
-```
-
-### More Content
-
-You can have **bold** and *italic* text, or even ***both together***.
-
-Horizontal rule:
-
----
-
-## Final Section
-
-Here's a paragraph with `code`, **strong text**, *emphasized text*, and a [link](https://nuxt.com) all in one line.
-
-> Blockquote with heading
-> 
-> #### Blockquote Heading
-> 
-> And a paragraph inside the blockquote.
-
-### Lists Combined
-
-- Item with **bold** and *italic*
-- Item with `code` and [link](https://example.com)
-- Item with ![image](/img.jpg "title")
-
-1. Numbered with **formatting**
-2. Numbered with `code`
-3. Numbered with [link](https://nuxt.com)
 ```

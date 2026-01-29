@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 ```javascript [hello.js]
@@ -32,7 +32,7 @@ function hello() {
         {
           "class": "language-javascript"
         },
-        "function hello() {\n  console.log(\"Hello, World!\");\n}\n"
+        "function hello() {\n  console.log(\"Hello, World!\");\n}"
       ]
     ]
   ]
@@ -44,8 +44,7 @@ function hello() {
 ```html
 <pre language="javascript" filename="hello.js"><code class="language-javascript">function hello() {
   console.log("Hello, World!");
-}
-</code></pre>
+}</code></pre>
 ```
 
 ## Markdown
@@ -57,4 +56,3 @@ function hello() {
 }
 ```
 ```
-

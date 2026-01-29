@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 | Command | Description |
@@ -109,7 +109,3 @@ timeout:
 | git status | List all new or modified files                 |
 | git diff   | Show file differences that haven't been staged |
 ```
-
-
-
-

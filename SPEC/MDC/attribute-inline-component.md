@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 Here :in{bool} :in{#id1} :in{.class1} :in{attr="value"}
@@ -66,4 +66,3 @@ Here :in{bool} :in{#id1} :in{.class1} :in{attr="value"}
 ```md
 Here :in{bool} :in{#id1} :in{.class1} :in{attr="value"}
 ```
-

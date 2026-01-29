@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 > #### The quarterly results look great!
@@ -55,4 +55,3 @@ timeout:
 > 
 > Paragraph
 ```
-

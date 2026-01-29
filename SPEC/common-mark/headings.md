@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 # H1
@@ -99,4 +99,3 @@ timeout:
 
 ###### H6
 ```
-

@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 :inline-component
@@ -94,4 +94,3 @@ Paragraph with :inline-component in middle
 
 ## a :inline inside heading
 ```
-

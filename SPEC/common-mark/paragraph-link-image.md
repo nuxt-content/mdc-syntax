@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 [![An old rock in the desert](/assets/images/shiprock.jpg "Shiprock, New Mexico by Beau Rogers")](/link)
@@ -29,8 +29,8 @@ timeout:
           "img",
           {
             "src": "/assets/images/shiprock.jpg",
-            "alt": "An old rock in the desert",
-            "title": "Shiprock, New Mexico by Beau Rogers"
+            "title": "Shiprock, New Mexico by Beau Rogers",
+            "alt": "An old rock in the desert"
           }
         ]
       ]
@@ -42,7 +42,7 @@ timeout:
 ## HTML
 
 ```html
-<p><a href="/link"><img src="/assets/images/shiprock.jpg" alt="An old rock in the desert" title="Shiprock, New Mexico by Beau Rogers" /></a></p>
+<p><a href="/link"><img src="/assets/images/shiprock.jpg" title="Shiprock, New Mexico by Beau Rogers" alt="An old rock in the desert" /></a></p>
 ```
 
 ## Markdown
@@ -50,4 +50,3 @@ timeout:
 ```md
 [![An old rock in the desert](/assets/images/shiprock.jpg "Shiprock, New Mexico by Beau Rogers")](/link)
 ```
-

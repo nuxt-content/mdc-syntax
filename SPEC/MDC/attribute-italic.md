@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 Here *em*{bool} *em*{#id1} *em*{.class1} *em*{attr="value"}
@@ -68,4 +68,3 @@ Here *em*{bool} *em*{#id1} *em*{.class1} *em*{attr="value"}
 ```md
 Here *em*{bool} *em*{#id1} *em*{.class1} *em*{attr="value"}
 ```
-

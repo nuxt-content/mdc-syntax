@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 ```
@@ -27,7 +27,7 @@ function hello() {
       [
         "code",
         {},
-        "function hello() {\n  console.log(\"Hello, World!\");\n}\n"
+        "function hello() {\n  console.log(\"Hello, World!\");\n}"
       ]
     ]
   ]
@@ -39,8 +39,7 @@ function hello() {
 ```html
 <pre><code>function hello() {
   console.log("Hello, World!");
-}
-</code></pre>
+}</code></pre>
 ```
 
 ## Markdown
@@ -52,4 +51,3 @@ function hello() {
 }
 ```
 ```
-

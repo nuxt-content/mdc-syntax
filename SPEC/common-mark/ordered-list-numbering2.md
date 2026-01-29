@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 1. First item
@@ -67,4 +67,3 @@ timeout:
 3. Third item
 4. Fourth item
 ```
-

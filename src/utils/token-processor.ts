@@ -300,7 +300,8 @@ function processBlockToken(tokens: any[], startIndex: number, insideNestedContex
       codeAttrs['class'] = `language-${parsed.language}`
     }
 
-    const code: MinimarkNode = ['code', codeAttrs, content] as MinimarkNode
+    const codeContentWithoutLastNewline = content.endsWith('\n') ? content.slice(0, -1) : content
+    const code: MinimarkNode = ['code', codeAttrs, codeContentWithoutLastNewline] as MinimarkNode
     const pre: MinimarkNode = ['pre', preAttrs, code] as MinimarkNode
     return { node: pre, nextIndex: startIndex + 1 }
   }

@@ -8,7 +8,10 @@ timeout:
 ## Input
 
 ```md
-``Use `code` in your Markdown file.``
+```
+Plain text code block
+No language specified
+```
 ```
 
 ## AST
@@ -18,12 +21,12 @@ timeout:
   "type": "minimark",
   "value": [
     [
-      "p",
+      "pre",
       {},
       [
         "code",
         {},
-        "Use `code` in your Markdown file."
+        "Plain text code block\nNo language specified"
       ]
     ]
   ]
@@ -33,11 +36,15 @@ timeout:
 ## HTML
 
 ```html
-<p><code>Use `code` in your Markdown file.</code></p>
+<pre><code>Plain text code block
+No language specified</code></pre>
 ```
 
 ## Markdown
 
 ```md
-``Use `code` in your Markdown file.``
+```
+Plain text code block
+No language specified
+```
 ```

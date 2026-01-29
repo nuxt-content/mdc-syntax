@@ -41,7 +41,7 @@
     "markdown-it": "^14.1.0",
     "markdown-it-mdc": "^0.2.8",
     "markdown-it-sub": "^2.0.0",
-    "minimark": "https://pkg.pr.new/minimark@c68ddf8",
+    "minimark": "https://pkg.pr.new/minimark@9df41a4",
     "nuxt": "^4.3.0",
     "obuild": "^0.4.22",
     "remark-gfm": "^4.0.1",
@@ -52,5 +52,8 @@
     "typescript": "^5.9.3",
     "unified": "^11.0.5",
     "vitest": "^4.0.18"
+  },
+  "dependencies": {
+    "shiki": "^3.21.0"
   }
 }

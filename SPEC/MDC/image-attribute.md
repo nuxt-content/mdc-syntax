@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 Here ![alt](https://example.com/image.jpg){bool} ![alt](https://example.com/image.jpg){#id1} ![alt](https://example.com/image.jpg){.class1} ![alt](https://example.com/image.jpg){attr="value"}

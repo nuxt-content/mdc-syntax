@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 Hello  
@@ -22,7 +22,10 @@ World
       "p",
       {},
       "Hello",
-      ["br", {}],
+      [
+        "br",
+        {}
+      ],
       "World"
     ]
   ]
@@ -41,4 +44,3 @@ World
 Hello  
 World
 ```
-

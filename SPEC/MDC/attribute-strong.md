@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 Here **strong**{bool} **strong**{#id1} **strong**{.class1} **strong**{attr="value"}
@@ -68,4 +68,3 @@ Here **strong**{bool} **strong**{#id1} **strong**{.class1} **strong**{attr="valu
 ```md
 Here **strong**{bool} **strong**{#id1} **strong**{.class1} **strong**{attr="value"}
 ```
-

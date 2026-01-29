@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 Here `code`{bool} `code`{#id1} `code`{.class1} `code`{attr="value"}
@@ -68,4 +68,3 @@ Here `code`{bool} `code`{#id1} `code`{.class1} `code`{attr="value"}
 ```md
 Here `code`{bool} `code`{#id1} `code`{.class1} `code`{attr="value"}
 ```
-

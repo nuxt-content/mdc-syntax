@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 | Header 1 | Header 2 |
@@ -109,7 +109,3 @@ timeout:
 | Cell 1   | Cell 2   |
 | Cell 3   | Cell 4   |
 ```
-
-
-
-

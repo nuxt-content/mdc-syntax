@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 ![The San Juan Mountains are beautiful](/assets/images/san-juan-mountains.jpg "San Juan Mountains")
@@ -24,8 +24,8 @@ timeout:
         "img",
         {
           "src": "/assets/images/san-juan-mountains.jpg",
-          "alt": "The San Juan Mountains are beautiful",
-          "title": "San Juan Mountains"
+          "title": "San Juan Mountains",
+          "alt": "The San Juan Mountains are beautiful"
         }
       ]
     ]
@@ -36,7 +36,7 @@ timeout:
 ## HTML
 
 ```html
-<p><img src="/assets/images/san-juan-mountains.jpg" alt="The San Juan Mountains are beautiful" title="San Juan Mountains" /></p>
+<p><img src="/assets/images/san-juan-mountains.jpg" title="San Juan Mountains" alt="The San Juan Mountains are beautiful" /></p>
 ```
 
 ## Markdown
@@ -44,4 +44,3 @@ timeout:
 ```md
 ![The San Juan Mountains are beautiful](/assets/images/san-juan-mountains.jpg "San Juan Mountains")
 ```
-

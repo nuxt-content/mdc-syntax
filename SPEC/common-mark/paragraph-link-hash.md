@@ -5,7 +5,7 @@ timeout:
   markdown: 5ms
 ---
 
-## Input 
+## Input
 
 ```md
 [Nuxt](#nuxt)
@@ -43,4 +43,3 @@ timeout:
 ```md
 [Nuxt](#nuxt)
 ```
-
