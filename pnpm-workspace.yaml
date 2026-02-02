@@ -9,3 +9,6 @@ ignoredBuiltDependencies:
 
 onlyBuiltDependencies:
   - better-sqlite3
+
+patchedDependencies:
+  markdown-it-mdc: patches/markdown-it-mdc.patch

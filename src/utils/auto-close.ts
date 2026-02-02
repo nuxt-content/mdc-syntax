@@ -15,22 +15,71 @@ export function autoCloseMarkdown(markdown: string): string {
     return markdown
   }
 
+  // Step 0: Close unclosed front matter
+  let result = closeFrontmatter(markdown)
+
   // Find the last line (where inline markers need closing)
-  const lastLineStart = markdown.lastIndexOf('\n') + 1
-  const lastLine = markdown.slice(lastLineStart)
+  const lastLineStart = result.lastIndexOf('\n') + 1
+  const lastLine = result.slice(lastLineStart)
 
   // Step 1: Close inline markers on last line
   const inlineResult = closeInlineMarkersLinear(lastLine)
-  let result = lastLineStart === 0
+  result = lastLineStart === 0
     ? inlineResult
-    : markdown.slice(0, lastLineStart) + inlineResult
+    : result.slice(0, lastLineStart) + inlineResult
 
   // Step 2: Close MDC components if any
-  if (markdown.includes('::')) {
+  if (result.includes('::')) {
     result = closeMDCComponentsLinear(result)
   }
 
   return result
+}
+
+/**
+ * Closes unclosed front matter (YAML between --- delimiters)
+ */
+function closeFrontmatter(markdown: string): string {
+  // Check if content starts with ---
+  if (!markdown.startsWith('---')) {
+    return markdown
+  }
+
+  // Find the first newline after opening ---
+  const firstNewline = markdown.indexOf('\n')
+  if (firstNewline === -1) {
+    // Just "---" with no newline, add closing
+    return markdown + '\n---'
+  }
+
+  // Look for closing --- on its own line
+  const content = markdown.slice(firstNewline + 1)
+  const lines = content.split('\n')
+
+  for (let i = 0; i < lines.length; i++) {
+    const trimmed = lines[i].trim()
+    // Found closing delimiter
+    if (trimmed === '---') {
+      return markdown
+    }
+  }
+
+  // Check if last line is a partial fence (- or --)
+  const lastLine = lines[lines.length - 1]
+  const lastLineTrimmed = lastLine.trim()
+
+  if (lastLineTrimmed === '-' || lastLineTrimmed === '--') {
+    // Complete the partial fence
+    const needed = 3 - lastLineTrimmed.length
+    return markdown + '-'.repeat(needed)
+  }
+
+  // No closing --- found, add it
+  // Make sure there's a newline before the closing ---
+  if (markdown.endsWith('\n')) {
+    return markdown + '---'
+  }
+  return markdown + '\n---'
 }
 
 /**
@@ -296,11 +345,26 @@ function closeMDCComponentsLinear(markdown: string): string {
     }
   }
 
-  // Track unclosed components
-  const componentStack: Array<{ depth: number, name: string }> = []
+  // Track unclosed components with their indentation and YAML props state
+  const componentStack: Array<{ depth: number, name: string, indent: string, hasYamlProps: boolean }> = []
 
   for (const line of lines) {
     const trimmed = line.trim()
+
+    // Extract leading indentation (spaces and tabs before content)
+    let indentEnd = 0
+    while (indentEnd < line.length && (line[indentEnd] === ' ' || line[indentEnd] === '\t')) {
+      indentEnd++
+    }
+    const indent = line.slice(0, indentEnd)
+
+    // Check for YAML props delimiter (---) inside a component
+    if (trimmed === '---' && componentStack.length > 0) {
+      const last = componentStack[componentStack.length - 1]
+      // Toggle YAML props state
+      last.hasYamlProps = !last.hasYamlProps
+      continue
+    }
 
     // Check for component opening/closing
     let i = 0
@@ -329,7 +393,7 @@ function closeMDCComponentsLinear(markdown: string): string {
             nameEnd++
           }
           const name = trimmed.slice(i, nameEnd)
-          componentStack.push({ depth: colonCount, name })
+          componentStack.push({ depth: colonCount, name, indent, hasYamlProps: false })
         }
         else if (colonCount === trimmed.length) {
           // Pure closing marker
@@ -344,15 +408,43 @@ function closeMDCComponentsLinear(markdown: string): string {
     }
   }
 
-  // Add closing markers
+  // Check if last line is a partial fence (- or --) inside a component's YAML props
+  const finalLine = lines[lines.length - 1]
+  const finalLineTrimmed = finalLine ? finalLine.trim() : ''
+  let partialFenceCompletion = ''
+
+  if (componentStack.length > 0) {
+    const lastComp = componentStack[componentStack.length - 1]
+    if (lastComp.hasYamlProps && (finalLineTrimmed === '-' || finalLineTrimmed === '--')) {
+      // Complete the partial fence
+      const needed = 3 - finalLineTrimmed.length
+      partialFenceCompletion = '-'.repeat(needed)
+      // Mark YAML props as closed since we're completing the fence
+      lastComp.hasYamlProps = false
+    }
+  }
+
+  // Add closing markers with matching indentation
   const closers: string[] = []
   while (componentStack.length > 0) {
     const comp = componentStack.pop()!
-    let closer = ''
+
+    // If component has unclosed YAML props, close them first (with same indentation)
+    if (comp.hasYamlProps) {
+      closers.push(comp.indent + '---')
+    }
+
+    // Close the component
+    let closer = comp.indent
     for (let i = 0; i < comp.depth; i++) {
       closer += ':'
     }
     closers.push(closer)
+  }
+
+  // Apply partial fence completion first, then closers
+  if (partialFenceCompletion) {
+    result += partialFenceCompletion
   }
 
   if (closers.length > 0) {

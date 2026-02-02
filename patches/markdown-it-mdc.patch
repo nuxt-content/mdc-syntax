@@ -1,0 +1,13 @@
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 92c4dc2d11f8350c8539a624ac9589d696228448..0918d501f8cd5dbedbe5c060e152d3b6c66c7861 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -349,7 +349,7 @@ const MarkdownItMdcBlock = (md) => {
+         const yaml = state.src.slice(state.bMarks[startLine + 1], state.eMarks[lineEnd - 1]);
+         const data = parse(yaml);
+         const token = state.env.mdcBlockTokens[0];
+-        Object.entries(data).forEach(([key, value]) => {
++        Object.entries(data || {}).forEach(([key, value]) => {
+           if (key === "class")
+             token.attrJoin(key, value);
+           else

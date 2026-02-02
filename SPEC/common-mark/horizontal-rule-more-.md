@@ -8,6 +8,8 @@ timeout:
 ## Input
 
 ```md
+Paragraph
+
 ------------------
 ```
 
@@ -17,6 +19,11 @@ timeout:
 {
   "type": "minimark",
   "value": [
+    [
+      "p",
+      {},
+      "Paragraph"
+    ],
     [
       "hr",
       {}
@@ -28,11 +35,14 @@ timeout:
 ## HTML
 
 ```html
+<p>Paragraph</p>
 <hr />
 ```
 
 ## Markdown
 
 ```md
+Paragraph
+
 ---
 ```

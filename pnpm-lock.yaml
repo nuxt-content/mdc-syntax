@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  markdown-it-mdc:
+    hash: 9ff5a29be7f84e94fa98aac853af92b31bc88b5e0cf220afb5236d35b507645c
+    path: patches/markdown-it-mdc.patch
+
 importers:
 
   .:
@@ -13,7 +18,7 @@ importers:
         version: 14.1.0
       markdown-it-mdc:
         specifier: ^0.2.9
-        version: 0.2.9(@types/markdown-it@14.1.2)(markdown-it@14.1.0)
+        version: 0.2.9(patch_hash=9ff5a29be7f84e94fa98aac853af92b31bc88b5e0cf220afb5236d35b507645c)(@types/markdown-it@14.1.2)(markdown-it@14.1.0)
       mdc-syntax:
         specifier: link:.
         version: 'link:'
@@ -13170,7 +13175,7 @@ snapshots:
     optionalDependencies:
       '@types/markdown-it': 14.1.2
 
-  markdown-it-mdc@0.2.9(@types/markdown-it@14.1.2)(markdown-it@14.1.0):
+  markdown-it-mdc@0.2.9(patch_hash=9ff5a29be7f84e94fa98aac853af92b31bc88b5e0cf220afb5236d35b507645c)(@types/markdown-it@14.1.2)(markdown-it@14.1.0):
     dependencies:
       '@types/markdown-it': 14.1.2
       markdown-it: 14.1.0

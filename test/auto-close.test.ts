@@ -105,6 +105,30 @@ describe('autoCloseMarkdown - MDC Components', () => {
     expect(autoCloseMarkdown(input)).toBe(expected)
   })
 
+  it('should preserve indentation when closing components', () => {
+    const input = '  ::alert\n  content'
+    const expected = '  ::alert\n  content\n  ::'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+
+  it('should preserve tab indentation when closing components', () => {
+    const input = '\t::alert\n\tcontent'
+    const expected = '\t::alert\n\tcontent\n\t::'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+
+  it('should preserve mixed indentation for nested components', () => {
+    const input = '  :::parent\n    ::child\n    content'
+    const expected = '  :::parent\n    ::child\n    content\n    ::\n  :::'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+
+  it('should handle deeply indented components', () => {
+    const input = '      ::deeply-indented\n      content here'
+    const expected = '      ::deeply-indented\n      content here\n      ::'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+
   it('should not add closing markers to empty content', () => {
     const input = ''
     expect(autoCloseMarkdown(input)).toBe(input)
@@ -243,6 +267,143 @@ describe('edge Cases', () => {
   it('should handle multiple paragraphs with unclosed component', () => {
     const input = '::card\n\nParagraph 1\n\nParagraph 2'
     const expected = '::card\n\nParagraph 1\n\nParagraph 2\n::'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+
+  const cases = [
+
+    {
+      input: `::u-page-section`,
+      expected: `::u-page-section\n::`,
+    },
+    {
+      input: `::u-page-section
+  :::u-page-feature`,
+      expected: `::u-page-section
+  :::u-page-feature
+  :::
+::`,
+    },
+  ]
+
+  cases.forEach(({ input, expected }) => {
+    it(`should handle ${input}`, () => {
+      expect(autoCloseMarkdown(input)).toBe(expected)
+    })
+  })
+})
+
+describe('component Yaml props', () => {
+  it('should handle component yaml props', () => {
+    const input = '::alert\n---\ntype:'
+    const expected = '::alert\n---\ntype:\n---\n::'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+  it('should handle component yaml props', () => {
+    const input = '::alert\n---\ntype: x\n-'
+    const expected = '::alert\n---\ntype: x\n---\n::'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+  it('should handle component yaml props', () => {
+    const input = '::alert\n---\ntype: x\n--'
+    const expected = '::alert\n---\ntype: x\n---\n::'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+  it('should handle component yaml props', () => {
+    const input = '::alert\n---\ntype: x\n---'
+    const expected = '::alert\n---\ntype: x\n---\n::'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+  it('should handle component yaml props with content', () => {
+    const input = '::alert\n---\ntype:\ncontent'
+    const expected = '::alert\n---\ntype:\ncontent\n---\n::'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+  it('should handle component yaml props in nested component', () => {
+    const input = `::u-page-section
+#title
+Everything you need for modern content parsing
+
+#features
+  :::u-page-feature
+  ---
+  icon: i-lucide-zap
+  to: /api/parse`
+    const expected = `::u-page-section
+#title
+Everything you need for modern content parsing
+
+#features
+  :::u-page-feature
+  ---
+  icon: i-lucide-zap
+  to: /api/parse
+  ---
+  :::
+::`
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+})
+
+describe('frontmatter', () => {
+  it('should handle frontmatter', () => {
+    const input = '---\ntitle: Test\n---'
+    const expected = '---\ntitle: Test\n---'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+  it('should handle frontmatter partial', () => {
+    const input = '---\ntitle: Test'
+    const expected = '---\ntitle: Test\n---'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+  it('should handle frontmatter partial', () => {
+    const input = '---\ntitle: Test\n-'
+    const expected = '---\ntitle: Test\n---'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+  it('should handle frontmatter partial', () => {
+    const input = '---\ntitle: Test\n--'
+    const expected = '---\ntitle: Test\n---'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+  it('should handle frontmatter partial 2', () => {
+    const input = '---\ntitle: '
+    const expected = '---\ntitle: \n---'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+  it('should handle frontmatter partial 3', () => {
+    const input = '---\ntitle: Test\n'
+    const expected = '---\ntitle: Test\n---'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+
+  it('should handle frontmatter with content after', () => {
+    const input = '---\ntitle: Test\n---\n\n# Hello'
+    const expected = '---\ntitle: Test\n---\n\n# Hello'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+
+  it('should handle closed frontmatter with unclosed component', () => {
+    const input = '---\ntitle: Test\n---\n\n::alert\nContent'
+    const expected = '---\ntitle: Test\n---\n\n::alert\nContent\n::'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+
+  it('should handle closed frontmatter with unclosed inline', () => {
+    const input = '---\ntitle: Test\n---\n\n**bold text'
+    const expected = '---\ntitle: Test\n---\n\n**bold text**'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+
+  it('should handle just opening ---', () => {
+    const input = '---'
+    const expected = '---\n---'
+    expect(autoCloseMarkdown(input)).toBe(expected)
+  })
+
+  it('should not treat --- in middle of content as frontmatter', () => {
+    const input = 'Some content\n---\nMore content'
+    const expected = 'Some content\n---\nMore content'
     expect(autoCloseMarkdown(input)).toBe(expected)
   })
 })

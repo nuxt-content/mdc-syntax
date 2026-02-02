@@ -7,6 +7,7 @@ import { parse } from './index'
 
 export interface IncrementalParseResult extends ParseResult {
   chunk: string // The chunk that was just processed
+  content: string // The accumulated content
   isComplete: boolean // Whether the stream is complete
 }
 
@@ -154,25 +155,31 @@ export async function* parseStreamIncremental(
 
       accumulatedContent += chunkStr
 
-      // Parse frontmatter if not already done
-      if (!frontmatterParsed) {
-        const { data } = parseFrontmatter(accumulatedContent)
-        frontmatterData = data
-        frontmatterParsed = true
+      try {
+        // Parse frontmatter if not already done
+        if (!frontmatterParsed) {
+          const { data } = parseFrontmatter(accumulatedContent)
+          frontmatterData = data
+          frontmatterParsed = true
+        }
+
+        // Auto-close unclosed syntax before parsing intermediate results
+        const closedContent = autoCloseMarkdown(accumulatedContent)
+
+        // Parse the auto-closed content
+        const result = parse(closedContent, options)
+
+        yield {
+          chunk: chunkStr,
+          body: result.body,
+          data: frontmatterData,
+          isComplete: false,
+          excerpt: result.excerpt,
+          content: accumulatedContent,
+        }
       }
-
-      // Auto-close unclosed syntax before parsing intermediate results
-      const closedContent = autoCloseMarkdown(accumulatedContent)
-
-      // Parse the auto-closed content
-      const result = parse(closedContent, options)
-
-      yield {
-        chunk: chunkStr,
-        body: result.body,
-        data: frontmatterData,
-        isComplete: false,
-        excerpt: result.excerpt,
+      catch {
+        // noop: errors in streaming are expected due to invalid yaml syntax
       }
     }
 
@@ -185,6 +192,7 @@ export async function* parseStreamIncremental(
       isComplete: true,
       excerpt: finalResult.excerpt,
       toc: finalResult.toc,
+      content: accumulatedContent,
     }
   }
   else {
@@ -206,6 +214,7 @@ export async function* parseStreamIncremental(
             isComplete: true,
             excerpt: finalResult.excerpt,
             toc: finalResult.toc,
+            content: accumulatedContent,
           }
           break
         }
@@ -232,6 +241,7 @@ export async function* parseStreamIncremental(
           data: frontmatterData,
           isComplete: false,
           excerpt: result.excerpt,
+          content: accumulatedContent,
         }
       }
     }
