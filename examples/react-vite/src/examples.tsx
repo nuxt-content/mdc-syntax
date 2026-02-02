@@ -8,7 +8,7 @@ import { parse } from 'mdc-syntax'
  */
 export function BasicExample() {
   const markdown = `# Hello **World**`
-  return <MDC value={markdown} />
+  return <MDC markdown={markdown} />
 }
 
 /**
@@ -30,7 +30,7 @@ export function CustomComponentsExample() {
     ::
   `
 
-  return <MDC value={markdown} components={{ alert: Alert }} />
+  return <MDC markdown={markdown} components={{ alert: Alert }} />
 }
 
 /**
@@ -58,7 +58,7 @@ export function InteractiveExample() {
         onChange={e => setMarkdown(e.target.value)}
         style={{ minHeight: '200px' }}
       />
-      <MDC value={markdown} />
+      <MDC markdown={markdown} />
     </div>
   )
 }
@@ -95,7 +95,7 @@ This content appears **gradually** as if it's being streamed.
     return () => clearInterval(interval)
   }, [])
 
-  return <MDC value={markdown} />
+  return <MDC markdown={markdown} />
 }
 
 /**
@@ -119,7 +119,7 @@ export function CustomProseExample() {
 
   return (
     <MDC
-      value={markdown}
+      markdown={markdown}
       components={{
         h1: CustomH1,
         a: CustomLink,
@@ -155,7 +155,7 @@ export function GFMExample() {
     ~~This is wrong~~ This is correct
   `
 
-  return <MDC value={markdown} />
+  return <MDC markdown={markdown} />
 }
 
 /**
@@ -172,12 +172,12 @@ export function CodeBlockExample() {
     import { MDC } from 'mdc-syntax/react'
 
     export default function App() {
-      return <MDC value="# Hello" />
+      return <MDC markdown="# Hello" />
     }
     \`\`\`
 
     And some inline \`code\` too!
   `
 
-  return <MDC value={markdown} />
+  return <MDC markdown={markdown} />
 }

@@ -32,12 +32,13 @@
     "verify": "pnpm run lint && pnpm run test && pnpm run typecheck"
   },
   "peerDependencies": {
-    "vue": "^3.5.27",
-    "react": "^19.2.4"
+    "react": "^19.2.4",
+    "vue": "^3.5.27"
   },
   "devDependencies": {
     "@nuxt/eslint-config": "^1.13.0",
     "@types/node": "^25.0.10",
+    "@vitejs/plugin-vue": "^6.0.3",
     "eslint": "^9.39.2",
     "github-slugger": "^2.0.0",
     "hast-util-to-string": "^3.0.1",
@@ -55,9 +56,9 @@
     "vitest": "^4.0.18"
   },
   "dependencies": {
-    "minimark": "https://pkg.pr.new/minimark@76668bf",
     "markdown-it": "^14.1.0",
     "markdown-it-mdc": "^0.2.8",
+    "minimark": "https://pkg.pr.new/minimark@76668bf",
     "remark-mdc": "^3.10.0",
     "shiki": "^3.21.0"
   }

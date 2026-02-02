@@ -1,44 +1,10 @@
 import type { PropType, VNode } from 'vue'
-import type { MinimarkNode, MinimarkTree } from 'minimark'
+import type { MinimarkElement, MinimarkNode, MinimarkTree } from 'minimark'
 import { computed, defineAsyncComponent, defineComponent, h, onErrorCaptured, ref } from 'vue'
 import { standardProseComponents } from './prose/standard'
 
 // Cache for dynamically resolved components
 const asyncComponentCache = new Map<string, any>()
-
-/**
- * Default HTML tag mappings for MDC elements
- */
-const defaultTagMap: Record<string, string> = {
-  p: 'p',
-  h1: 'h1',
-  h2: 'h2',
-  h3: 'h3',
-  h4: 'h4',
-  h5: 'h5',
-  h6: 'h6',
-  ul: 'ul',
-  ol: 'ol',
-  li: 'li',
-  a: 'a',
-  strong: 'strong',
-  em: 'em',
-  code: 'code',
-  pre: 'pre',
-  blockquote: 'blockquote',
-  hr: 'hr',
-  br: 'br',
-  img: 'img',
-  table: 'table',
-  thead: 'thead',
-  tbody: 'tbody',
-  tr: 'tr',
-  th: 'th',
-  td: 'td',
-  del: 'del',
-  div: 'div',
-  span: 'span',
-}
 
 /**
  * Helper to get tag from a MinimarkNode
@@ -92,6 +58,7 @@ function renderNode(
   components: Record<string, any> = {},
   key?: string | number,
   componentsManifest?: (name: string) => Promise<any>,
+  parent?: MinimarkNode,
 ): VNode | string | null {
   // Handle text nodes (strings)
   if (typeof node === 'string') {
@@ -107,26 +74,31 @@ function renderNode(
     const children = getChildren(node)
 
     // Check if there's a custom component for this tag
-    let customComponent = components[tag]
+    let customComponent = tag
 
-    // If not in components map and manifest is provided, try dynamic resolution
-    if (!customComponent && componentsManifest && !defaultTagMap[tag]) {
-      // Check cache first to avoid creating duplicate async components
-      const cacheKey = tag
-      if (!asyncComponentCache.has(cacheKey)) {
-        asyncComponentCache.set(
-          cacheKey,
-          defineAsyncComponent(() => componentsManifest(tag)),
-        )
+    if ((parent as MinimarkElement | undefined)?.[0] !== 'pre') {
+      customComponent = components[tag]
+      // If not in components map and manifest is provided, try dynamic resolution
+      if (!customComponent && componentsManifest) {
+        // Check cache first to avoid creating duplicate async components
+        const cacheKey = tag
+        if (!asyncComponentCache.has(cacheKey)) {
+          asyncComponentCache.set(
+            cacheKey,
+            defineAsyncComponent(() => componentsManifest(tag)),
+          )
+        }
+        customComponent = asyncComponentCache.get(cacheKey)
       }
-      customComponent = asyncComponentCache.get(cacheKey)
     }
 
-    const component = customComponent || defaultTagMap[tag] || tag
+    const component = customComponent || tag
 
     // Prepare props
     const props: Record<string, any> = { ...nodeProps }
-    props.__node = node
+    if (typeof component !== 'string') {
+      props.__node = node
+    }
 
     for (const [key, value] of Object.entries(nodeProps)) {
       if (key.startsWith(':')) {
@@ -175,13 +147,13 @@ function renderNode(
         if (slotName) {
           const slotChildren = getChildren(child)
           slots[slotName] = () => slotChildren
-            .map((slotChild: MinimarkNode, idx: number) => renderNode(slotChild, components, idx, componentsManifest))
+            .map((slotChild: MinimarkNode, idx: number) => renderNode(slotChild, components, idx, componentsManifest, node))
             .filter((slotChild): slotChild is VNode | string => slotChild !== null)
           continue
         }
       }
 
-      const rendered = renderNode(child, components, i, componentsManifest)
+      const rendered = renderNode(child, components, i, componentsManifest, node)
       if (rendered !== null) {
         regularChildren.push(rendered)
       }
@@ -258,6 +230,9 @@ export const MDCRenderer = defineComponent({
       default: undefined,
     },
 
+    /**
+     * Enable streaming mode with stream-specific components
+     */
     stream: {
       type: Boolean as PropType<boolean>,
       default: false,
@@ -266,16 +241,6 @@ export const MDCRenderer = defineComponent({
 
   async setup(props) {
     const componentErrors = ref(new Set<string>())
-
-    const streamComponents = props.stream
-      ? await import('./prose/stream').then(m => m.proseStreamComponents)
-      : {}
-
-    const components = computed(() => ({
-      ...standardProseComponents,
-      ...streamComponents,
-      ...props.components,
-    }))
 
     // Capture errors from child components (e.g., during streaming when props are incomplete)
     onErrorCaptured((err, instance, info) => {
@@ -294,6 +259,16 @@ export const MDCRenderer = defineComponent({
       // Prevent error from propagating (don't crash the app during streaming)
       return false
     })
+
+    const streamComponents = props.stream
+      ? await import('./prose/stream').then(m => m.proseStreamComponents)
+      : {}
+
+    const components = computed(() => ({
+      ...standardProseComponents,
+      ...streamComponents,
+      ...props.components,
+    }))
 
     return () => {
       // Render all nodes from the tree value

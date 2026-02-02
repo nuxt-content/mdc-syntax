@@ -41,6 +41,9 @@ importers:
       '@types/node':
         specifier: ^25.0.10
         version: 25.0.10
+      '@vitejs/plugin-vue':
+        specifier: ^6.0.3
+        version: 6.0.3(vite@7.3.1(@types/node@25.0.10)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0)(yaml@2.8.2))(vue@3.5.27(typescript@5.9.3))
       eslint:
         specifier: ^9.39.2
         version: 9.39.2(jiti@2.6.1)
@@ -96,7 +99,7 @@ importers:
         specifier: latest
         version: 5.4.4(@unhead/vue@2.1.2(vue@3.5.27(typescript@5.9.3)))(@vue/compiler-dom@3.5.27)(better-sqlite3@12.6.2)(db0@0.3.4(better-sqlite3@12.6.2))(eslint@9.39.2(jiti@2.6.1))(hono@4.11.5)(ioredis@5.9.2)(magicast@0.5.1)(nuxt@4.3.0(@parcel/watcher@2.5.4)(@types/node@25.0.10)(@vue/compiler-sfc@3.5.27)(better-sqlite3@12.6.2)(cac@6.7.14)(db0@0.3.4(better-sqlite3@12.6.2))(eslint@9.39.2(jiti@2.6.1))(ioredis@5.9.2)(lightningcss@1.31.1)(magicast@0.5.1)(optionator@0.9.4)(rolldown@1.0.0-rc.1)(rollup@4.55.1)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.10)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.4(typescript@5.9.3))(yaml@2.8.2))(react-dom@18.3.1(react@19.2.4))(react@19.2.4)(rollup@4.55.1)(typescript@5.9.3)(unstorage@1.17.4(db0@0.3.4(better-sqlite3@12.6.2))(ioredis@5.9.2))(vite@7.3.1(@types/node@25.0.10)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0)(yaml@2.8.2))(vue-router@4.6.4(vue@3.5.27(typescript@5.9.3)))(vue@3.5.27(typescript@5.9.3))
       mdc-syntax:
-        specifier: link:..
+        specifier: workspace:*
         version: link:..
       nuxt:
         specifier: ^4.3.0

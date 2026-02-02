@@ -1,4 +1,5 @@
 import { defineComponent, h } from 'vue'
+import ShikiCodeBlock from '../ShikiCodeBlock.vue'
 
 /**
  * Standard Typography Prose Components
@@ -16,7 +17,7 @@ export const standardProseComponents = {
     name: 'ProseH1Standard',
     setup(props, { slots }) {
       return () => h('h1', {
-        class: 'prose-h1-standard text-5xl font-bold mt-0 mb-8 text-gray-900 dark:text-white leading-tight',
+        class: 'prose-h1-standard text-5xl font-bold mt-0 mb-8 text-neutral-900 dark:text-white leading-tight',
         ...props,
       }, slots.default?.())
     },
@@ -25,7 +26,7 @@ export const standardProseComponents = {
     name: 'ProseH2Standard',
     setup(props, { slots }) {
       return () => h('h2', {
-        class: 'prose-h2-standard text-4xl font-bold mt-16 mb-6 text-gray-800 dark:text-gray-100',
+        class: 'prose-h2-standard text-4xl font-bold mt-16 mb-6 text-neutral-800 dark:text-neutral-100',
         ...props,
       }, slots.default?.())
     },
@@ -34,7 +35,7 @@ export const standardProseComponents = {
     name: 'ProseH3Standard',
     setup(props, { slots }) {
       return () => h('h3', {
-        class: 'prose-h3-standard text-3xl font-semibold mt-12 mb-4 text-gray-800 dark:text-gray-100',
+        class: 'prose-h3-standard text-3xl font-semibold mt-12 mb-4 text-neutral-800 dark:text-neutral-100',
         ...props,
       }, slots.default?.())
     },
@@ -43,7 +44,7 @@ export const standardProseComponents = {
     name: 'ProseH4Standard',
     setup(props, { slots }) {
       return () => h('h4', {
-        class: 'prose-h4-standard text-2xl font-semibold mt-10 mb-3 text-gray-700 dark:text-gray-200',
+        class: 'prose-h4-standard text-2xl font-semibold mt-10 mb-3 text-neutral-700 dark:text-neutral-200',
         ...props,
       }, slots.default?.())
     },
@@ -52,7 +53,7 @@ export const standardProseComponents = {
     name: 'ProseH5Standard',
     setup(props, { slots }) {
       return () => h('h5', {
-        class: 'prose-h5-standard text-xl font-semibold mt-8 mb-3 text-gray-700 dark:text-gray-200',
+        class: 'prose-h5-standard text-xl font-semibold mt-8 mb-3 text-neutral-700 dark:text-neutral-200',
         ...props,
       }, slots.default?.())
     },
@@ -61,7 +62,7 @@ export const standardProseComponents = {
     name: 'ProseH6Standard',
     setup(props, { slots }) {
       return () => h('h6', {
-        class: 'prose-h6-standard text-lg font-semibold mt-6 mb-2 text-gray-600 dark:text-gray-300',
+        class: 'prose-h6-standard text-lg font-semibold mt-6 mb-2 text-neutral-600 dark:text-neutral-300',
         ...props,
       }, slots.default?.())
     },
@@ -72,7 +73,7 @@ export const standardProseComponents = {
     name: 'ProsePStandard',
     setup(props, { slots }) {
       return () => h('p', {
-        class: 'prose-p-standard my-6 text-gray-700 dark:text-gray-300 leading-relaxed text-lg',
+        class: 'prose-p-standard my-6 text-neutral-700 dark:text-neutral-300 leading-relaxed text-lg',
         ...props,
       }, slots.default?.())
     },
@@ -81,7 +82,7 @@ export const standardProseComponents = {
     name: 'ProseStrongStandard',
     setup(props, { slots }) {
       return () => h('strong', {
-        class: 'prose-strong-standard font-bold text-gray-900 dark:text-gray-100',
+        class: 'prose-strong-standard font-bold text-neutral-900 dark:text-neutral-100',
         ...props,
       }, slots.default?.())
     },
@@ -90,7 +91,7 @@ export const standardProseComponents = {
     name: 'ProseEmStandard',
     setup(props, { slots }) {
       return () => h('em', {
-        class: 'prose-em-standard italic text-gray-600 dark:text-gray-400',
+        class: 'prose-em-standard italic text-neutral-600 dark:text-neutral-400',
         ...props,
       }, slots.default?.())
     },
@@ -99,7 +100,7 @@ export const standardProseComponents = {
     name: 'ProseDelStandard',
     setup(props, { slots }) {
       return () => h('del', {
-        class: 'prose-del-standard line-through text-gray-500 dark:text-gray-500 opacity-75',
+        class: 'prose-del-standard line-through text-neutral-500 dark:text-neutral-500 opacity-75',
         ...props,
       }, slots.default?.())
     },
@@ -121,27 +122,19 @@ export const standardProseComponents = {
     name: 'ProseCodeStandard',
     setup(props, { slots }) {
       return () => h('code', {
-        class: 'prose-code-standard bg-gray-100 dark:bg-gray-800 text-pink-600 dark:text-pink-400 px-2 py-1 rounded text-base font-mono',
+        class: 'prose-code-standard bg-neutral-100 dark:bg-neutral-800 text-pink-600 dark:text-pink-400 px-2 py-1 rounded text-base font-mono',
         ...props,
       }, slots.default?.())
     },
   }),
-  pre: defineComponent({
-    name: 'ProsePreStandard',
-    setup(props, { slots }) {
-      return () => h('pre', {
-        class: 'prose-pre-standard bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-6 rounded-xl overflow-x-auto my-8 border border-gray-200 dark:border-gray-800 text-base leading-relaxed',
-        ...props,
-      }, slots.default?.())
-    },
-  }),
+  pre: ShikiCodeBlock,
 
   // Lists
   ul: defineComponent({
     name: 'ProseUlStandard',
     setup(props, { slots }) {
       return () => h('ul', {
-        class: 'prose-ul-standard list-disc list-outside ml-6 my-6 text-gray-700 dark:text-gray-300 space-y-3 text-lg',
+        class: 'prose-ul-standard list-disc list-outside ml-6 my-6 text-neutral-700 dark:text-neutral-300 space-y-3 text-lg',
         ...props,
       }, slots.default?.())
     },
@@ -150,7 +143,7 @@ export const standardProseComponents = {
     name: 'ProseOlStandard',
     setup(props, { slots }) {
       return () => h('ol', {
-        class: 'prose-ol-standard list-decimal list-outside ml-6 my-6 text-gray-700 dark:text-gray-300 space-y-3 text-lg',
+        class: 'prose-ol-standard list-decimal list-outside ml-6 my-6 text-neutral-700 dark:text-neutral-300 space-y-3 text-lg',
         ...props,
       }, slots.default?.())
     },
@@ -170,7 +163,7 @@ export const standardProseComponents = {
     name: 'ProseBlockquoteStandard',
     setup(props, { slots }) {
       return () => h('blockquote', {
-        class: 'prose-blockquote-standard border-l-4 border-blue-400 dark:border-blue-600 pl-6 my-8 text-gray-600 dark:text-gray-400 italic text-xl',
+        class: 'prose-blockquote-standard border-l-4 border-blue-400 dark:border-blue-600 pl-6 my-8 text-neutral-600 dark:text-neutral-400 italic text-xl',
         ...props,
       }, slots.default?.())
     },
@@ -208,7 +201,7 @@ export const standardProseComponents = {
     name: 'ProseTrStandard',
     setup(props, { slots }) {
       return () => h('tr', {
-        class: 'prose-tr-standard border-b border-gray-200 dark:border-gray-800',
+        class: 'prose-tr-standard border-b border-neutral-200 dark:border-neutral-800',
         ...props,
       }, slots.default?.())
     },
@@ -217,7 +210,7 @@ export const standardProseComponents = {
     name: 'ProseThStandard',
     setup(props, { slots }) {
       return () => h('th', {
-        class: 'prose-th-standard bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-6 py-3 text-left font-semibold text-gray-900 dark:text-white',
+        class: 'prose-th-standard bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 px-6 py-3 text-left font-semibold text-neutral-900 dark:text-white',
         ...props,
       }, slots.default?.())
     },
@@ -226,7 +219,7 @@ export const standardProseComponents = {
     name: 'ProseTdStandard',
     setup(props, { slots }) {
       return () => h('td', {
-        class: 'prose-td-standard border border-gray-200 dark:border-gray-800 px-6 py-3 text-gray-700 dark:text-gray-300',
+        class: 'prose-td-standard border border-neutral-200 dark:border-neutral-800 px-6 py-3 text-neutral-700 dark:text-neutral-300',
         ...props,
       }, slots.default?.())
     },
@@ -237,7 +230,7 @@ export const standardProseComponents = {
     name: 'ProseHrStandard',
     setup(props) {
       return () => h('hr', {
-        class: 'prose-hr-standard my-12 border-t border-gray-300 dark:border-gray-700',
+        class: 'prose-hr-standard my-12 border-t border-neutral-300 dark:border-neutral-700',
         ...props,
       })
     },
@@ -273,10 +266,10 @@ export const standardProseComponents = {
     name: 'ProseCardStandard',
     setup(props: any, { slots }) {
       return () => h('div', {
-        class: 'prose-card-standard border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-xl p-6 my-8 shadow-md hover:shadow-lg transition-shadow',
+        class: 'prose-card-standard border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 rounded-xl p-6 my-8 shadow-md hover:shadow-lg transition-shadow',
         ...props,
       }, [
-        props.title && h('h3', { class: 'text-2xl font-bold mb-4 text-gray-900 dark:text-white' }, props.title),
+        props.title && h('h3', { class: 'text-2xl font-bold mb-4 text-neutral-900 dark:text-white' }, props.title),
         h('div', {}, slots.default?.()),
       ])
     },

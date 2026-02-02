@@ -1,5 +1,5 @@
-import ShikiCodeBlock from '../ShikiCodeBlock.vue'
+import ShikiCachedCodeBlock from '../ShikiCachedCodeBlock.vue'
 
 export const proseStreamComponents = {
-  pre: ShikiCodeBlock,
+  pre: ShikiCachedCodeBlock,
 }

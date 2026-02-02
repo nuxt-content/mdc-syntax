@@ -7,7 +7,7 @@ export interface MDCProps {
   /**
    * The markdown content to parse and render
    */
-  value: string
+  markdown: string
 
   /**
    * Parser options
@@ -65,12 +65,12 @@ export interface MDCProps {
  *     ::
  *   `
  *
- *   return <MDC value={content} components={customComponents} />
+ *   return <MDC markdown={content} components={customComponents} />
  * }
  * ```
  */
 export const MDC: React.FC<MDCProps> = ({
-  value,
+  markdown,
   options = {},
   components: customComponents = {},
   componentsManifest,
@@ -85,14 +85,14 @@ export const MDC: React.FC<MDCProps> = ({
 
     if (stream) {
       // Use synchronous parse for streaming mode
-      const result = parse(value, options)
+      const result = parse(markdown, options)
       if (isMounted) {
         setParsed(result)
       }
     }
     else {
       // Use async parse for non-streaming mode (supports code highlighting, etc.)
-      parseAsync(value, options).then((result) => {
+      parseAsync(markdown, options).then((result) => {
         if (isMounted) {
           setParsed(result)
         }
@@ -104,7 +104,7 @@ export const MDC: React.FC<MDCProps> = ({
     return () => {
       isMounted = false
     }
-  }, [value, stream])
+  }, [markdown, stream])
 
   if (!parsed) {
     return null

@@ -97,12 +97,12 @@ const StreamingPreview: React.FC<StreamingPreviewProps> = ({
         <button
           onClick={reset}
           disabled={!isStreaming && progress === 0}
-          className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="px-4 py-2 bg-neutral-500 text-white rounded-lg hover:bg-neutral-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           Reset
         </button>
         {progress > 0 && (
-          <span className="text-sm text-gray-600 dark:text-gray-400">
+          <span className="text-sm text-neutral-600 dark:text-neutral-400">
             {progress.toFixed(0)}
             %
           </span>
@@ -110,7 +110,7 @@ const StreamingPreview: React.FC<StreamingPreviewProps> = ({
       </div>
 
       {progress > 0 && (
-        <div className="flex-shrink-0 w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+        <div className="flex-shrink-0 w-full h-2 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300"
             style={{ width: `${progress}%` }}
@@ -118,15 +118,15 @@ const StreamingPreview: React.FC<StreamingPreviewProps> = ({
         </div>
       )}
 
-      <div className="flex-1 border-2 border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-gray-800 overflow-y-auto min-h-0">
+      <div className="flex-1 border-2 border-neutral-200 dark:border-neutral-700 rounded-lg p-6 bg-white dark:bg-neutral-800 overflow-y-auto min-h-0">
         {accumulated
           ? (
               <div className="leading-relaxed">
-                <MDC value={accumulated} components={components} stream={true} />
+                <MDC markdown={accumulated} components={components} stream={true} />
               </div>
             )
           : (
-              <div className="text-gray-400 dark:text-gray-500 italic">
+              <div className="text-neutral-400 dark:text-neutral-500 italic">
                 Click "Start Stream" to see streaming in action...
               </div>
             )}
@@ -225,23 +225,23 @@ function App() {
 
   return (
     <div className="h-screen flex flex-col overflow-hidden max-w-[1400px] mx-auto">
-      <header className="flex-shrink-0 text-center py-6 px-8 border-b-2 border-gray-200 dark:border-gray-700">
+      <header className="flex-shrink-0 text-center py-6 px-8 border-b-2 border-neutral-200 dark:border-neutral-700">
         <h1 className="text-4xl bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
           MDC Syntax - React Example
         </h1>
-        <p className="mt-2 text-gray-500 dark:text-gray-400">
+        <p className="mt-2 text-neutral-500 dark:text-neutral-400">
           Interactive markdown editor with live preview & streaming support
         </p>
       </header>
 
-      <div className="flex-shrink-0 px-8 py-4 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex-shrink-0 px-8 py-4 bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
         <div className="flex items-center gap-4 flex-wrap">
           <button
             onClick={() => setMode('editor')}
             className={`px-4 py-2 rounded-lg transition-colors ${
               mode === 'editor'
                 ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-300 dark:hover:bg-neutral-600'
             }`}
           >
             Editor Mode
@@ -251,7 +251,7 @@ function App() {
             className={`px-4 py-2 rounded-lg transition-colors ${
               mode === 'streaming'
                 ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-300 dark:hover:bg-neutral-600'
             }`}
           >
             Streaming Demo
@@ -273,20 +273,20 @@ function App() {
           ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
                 <div className="flex flex-col min-h-0">
-                  <h2 className="mb-3 text-xl text-gray-800 dark:text-gray-100">Markdown Input</h2>
+                  <h2 className="mb-3 text-xl text-neutral-800 dark:text-neutral-100">Markdown Input</h2>
                   <textarea
                     value={markdown}
                     onChange={e => setMarkdown(e.target.value)}
                     placeholder="Enter markdown here..."
-                    className="flex-1 w-full p-4 font-mono text-sm leading-relaxed border-2 border-gray-200 dark:border-gray-700 rounded-lg resize-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 overflow-y-auto"
+                    className="flex-1 w-full p-4 font-mono text-sm leading-relaxed border-2 border-neutral-200 dark:border-neutral-700 rounded-lg resize-none bg-white dark:bg-neutral-800 text-neutral-800 dark:text-neutral-100 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 overflow-y-auto"
                   />
                 </div>
 
                 <div className="flex flex-col min-h-0">
-                  <h2 className="mb-3 text-xl text-gray-800 dark:text-gray-100">Live Preview</h2>
-                  <div className="flex-1 border-2 border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-gray-800 overflow-y-auto">
+                  <h2 className="mb-3 text-xl text-neutral-800 dark:text-neutral-100">Live Preview</h2>
+                  <div className="flex-1 border-2 border-neutral-200 dark:border-neutral-700 rounded-lg p-6 bg-white dark:bg-neutral-800 overflow-y-auto">
                     <div className="leading-relaxed">
-                      <MDC value={markdown} components={customComponents} options={{ highlight: true }} />
+                      <MDC markdown={markdown} components={customComponents} options={{ highlight: true }} />
                     </div>
                   </div>
                 </div>

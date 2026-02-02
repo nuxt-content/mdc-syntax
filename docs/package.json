@@ -1,5 +1,5 @@
 {
-  "name": "docs",
+  "name": "MDC Syntax",
   "scripts": {
     "dev": "nuxt dev --extends docus",
     "build": "nuxt build --extends docus"
@@ -7,7 +7,7 @@
   "dependencies": {
     "better-sqlite3": "^12.6.2",
     "docus": "latest",
-    "mdc-syntax": "link:..",
+    "mdc-syntax": "workspace:*",
     "nuxt": "^4.3.0"
   }
 }

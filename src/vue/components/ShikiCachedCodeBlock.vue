@@ -1,6 +1,30 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ShikiCachedRenderer } from 'shiki-stream/vue'
+import { createHighlighter } from 'shiki'
+import { computed, onMounted, ref, watch } from 'vue'
 import { textContent } from 'minimark'
+
+// Singleton highlighter instance shared across all code blocks
+let highlighterInstance: any = null
+let highlighterPromise: Promise<any> | null = null
+
+async function getHighlighter() {
+  if (highlighterInstance) {
+    return highlighterInstance
+  }
+
+  if (!highlighterPromise) {
+    highlighterPromise = createHighlighter({
+      themes: ['material-theme-lighter', 'material-theme-palenight', 'github-dark', 'github-light'],
+      langs: ['javascript', 'typescript', 'vue', 'html', 'css', 'json', 'markdown', 'bash', 'tsx', 'shell', 'text'],
+    }).then((hl) => {
+      highlighterInstance = hl
+      return hl
+    })
+  }
+
+  return highlighterPromise
+}
 
 const props = withDefaults(defineProps<{
   // @eslint-disable-next-line vue/prop-name-casing
@@ -16,8 +40,18 @@ const props = withDefaults(defineProps<{
   theme: 'github-dark',
   containerClass: 'my-4',
   fallbackClass: 'bg-neutral-800 text-neutral-200 p-4 rounded-lg overflow-x-auto border border-neutral-700',
+  fallbackWithHeaderClass: 'bg-neutral-800 text-neutral-200 p-4 pt-12 rounded-lg overflow-x-auto m-0 border border-neutral-700',
+  shikiStyle: () => ({
+    '--shiki-margin': '0',
+    '--shiki-padding': '1rem',
+    '--shiki-padding-top': '3rem',
+    '--shiki-border-radius': '0.5rem',
+    '--shiki-border': '1px solid rgb(55, 65, 81)',
+  }),
 })
 
+const highlighter = ref<any>(null)
+const isLoading = ref(true)
 const componentKey = ref(0)
 const copied = ref(false)
 const codeContent = ref('')
@@ -35,6 +69,11 @@ const extractCodeFromNode = () => {
 
 // Initialize code extraction
 extractCodeFromNode()
+
+// Create a stable key for ShikiCachedRenderer remounting
+const rendererKey = computed(() => {
+  return `${componentKey.value}-${codeContent.value.slice(0, 20)}-${props.language}-${props.theme}`
+})
 
 // Watch for code changes and force remount
 watch(() => props.__node, () => {
@@ -58,12 +97,27 @@ async function copyCode() {
     console.error('Failed to copy code:', error)
   }
 }
+
+// Load highlighter on mount
+onMounted(() => {
+  getHighlighter()
+    .then((hl) => {
+      highlighter.value = hl
+      isLoading.value = false
+    })
+    .catch((error) => {
+      console.error('Failed to create highlighter:', error)
+      isLoading.value = false
+    })
+})
 </script>
 
 <template>
-  <div :class="`relative ${containerClass} group rounded-lg`">
+  <div
+    :class="`relative ${containerClass} group`"
+  >
     <!-- Header with language label and copy button -->
-    <div class="rounded-t-lg border border-b-0 border-neutral-700 top-[-1.5rem] right-0 left-0 flex items-center justify-between px-4 py-2 z-10">
+    <div class="absolute top-0 right-0 left-0 flex items-center justify-between px-4 py-2 z-10">
       <!-- Language label -->
       <span
         class="font-mono font-semibold tracking-wider text-neutral-400 bg-neutral-800/80 px-2.5 py-1 rounded backdrop-blur-sm"
@@ -74,7 +128,7 @@ async function copyCode() {
       <!-- Copy button -->
       <button
         type="button"
-        class="ml-auto px-3 py-1.5 text-xs font-medium rounded transition-all duration-200 bg-neutral-700/80 hover:bg-neutral-600 text-neutral-300 hover:text-white backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        class="ml-auto px-3 py-1.5 text-xs font-medium rounded transition-all duration-200 bg-neutral-700/80 hover:bg-neutral-600 text-neutral-300 hover:text-white backdrop-blur-sm opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
         @click="copyCode"
       >
         <span
@@ -118,7 +172,31 @@ async function copyCode() {
       </button>
     </div>
 
+    <!-- Loading state -->
+    <pre
+      v-if="isLoading"
+      class="bg-neutral-800 rounded-lg pt-16 p-4 border border-neutral-700"
+    ><code>{{ codeContent }}</code></pre>
+
     <!-- Shiki renderer -->
-    <pre class="shiki-container bg-neutral-800 rounded-b-lg pt-16 p-4 border border-neutral-700"><slot /></pre>
+    <ShikiCachedRenderer
+      v-else-if="highlighter"
+      :key="rendererKey"
+      :highlighter="highlighter"
+      :code="codeContent"
+      :lang="language || 'text'"
+      :theme="theme || 'github-dark'"
+      class="shiki-container bg-neutral-800 rounded-lg pt-16 p-4 border border-neutral-700"
+      :style="shikiStyle"
+    />
+
+    <!-- Fallback with header padding -->
+    <pre
+      v-else
+      :class="fallbackWithHeaderClass"
+    >
+    sas
+      <code class="font-mono text-sm leading-relaxed block whitespace-pre">{{ codeContent }}</code>
+    </pre>
   </div>
 </template>

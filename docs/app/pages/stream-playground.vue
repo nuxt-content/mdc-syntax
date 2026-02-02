@@ -421,7 +421,7 @@ async function copyMarkdown() {
                 v-if="showAst"
                 class="font-mono text-[10px]"
               >
-                <pre class="whitespace-pre-wrap text-gray-800 dark:text-gray-200">{{ JSON.stringify(streamState.body, null, 2) }}</pre>
+                <pre class="whitespace-pre-wrap text-neutral-800 dark:text-neutral-200">{{ JSON.stringify(streamState.body, null, 2) }}</pre>
               </div>
 
               <!-- Rendered View -->
@@ -436,7 +436,7 @@ async function copyMarkdown() {
                 />
                 <div
                   v-else
-                  class="text-gray-400 text-center py-12 text-xs"
+                  class="text-neutral-400 text-center py-12 text-xs"
                 >
                   No content yet. Click "Start" to begin streaming.
                 </div>

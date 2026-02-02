@@ -1,24 +1,24 @@
 ---
 seo:
   title: MDC Syntax - Modern Markdown Component Parser
-  description: Fast, streaming-ready markdown parser with Vue component support. Parse MDC content from strings or streams with TypeScript support and Vue 3 integration.
+  description: Fast, streaming-ready markdown parser with Vue and React component support. Parse MDC content from strings or streams with TypeScript support.
 ---
 
-::u-page-hero
+::landing-hero
 #title
-Parse Markdown with Vue Components
+Markdown but with Components
 
 #description
 Fast, streaming-ready markdown parser with full MDC (Markdown Component) syntax support.
 
-Built for modern applications with TypeScript, Vue 3 integration, and real-time streaming capabilities.
+Built for modern applications with TypeScript, Vue 3, React, and real-time streaming capabilities.
 
 #links
   :::u-button
   ---
   color: neutral
   size: xl
-  to: /installation
+  to: /getting-started/introduction
   trailing-icon: i-lucide-arrow-right
   ---
   Get started
@@ -36,6 +36,8 @@ Built for modern applications with TypeScript, Vue 3 integration, and real-time 
   :::
 ::
 
+:landing-get-started
+
 ::u-page-section
 #title
 Everything you need for modern content parsing
@@ -44,7 +46,7 @@ Everything you need for modern content parsing
   :::u-page-feature
   ---
   icon: i-lucide-zap
-  to: /parse-api
+  to: /api/parse
   ---
   #title
   [Fast]{.text-primary} markdown-it parser
@@ -56,7 +58,7 @@ Everything you need for modern content parsing
   :::u-page-feature
   ---
   icon: i-lucide-activity
-  to: /parse-api#stream-parsing
+  to: /api/parse#stream-parsing
   ---
   #title
   [Real-time streaming]{.text-primary} support
@@ -68,7 +70,7 @@ Everything you need for modern content parsing
   :::u-page-feature
   ---
   icon: i-lucide-puzzle
-  to: /mdc-renderer
+  to: /rendering/vue-renderer
   ---
   #title
   [Vue component]{.text-primary} integration
@@ -79,8 +81,20 @@ Everything you need for modern content parsing
 
   :::u-page-feature
   ---
+  icon: i-simple-icons-react
+  to: /rendering/react
+  ---
+  #title
+  [React support]{.text-primary} built-in
+
+  #description
+  First-class React integration with MDCRenderer component. Dynamic component loading, streaming mode, and full TypeScript support.
+  :::
+
+  :::u-page-feature
+  ---
   icon: i-lucide-shield-check
-  to: /auto-close-api
+  to: /api/auto-close
   ---
   #title
   [Auto-close]{.text-primary} incomplete syntax
@@ -91,25 +105,21 @@ Everything you need for modern content parsing
 
   :::u-page-feature
   ---
-  icon: i-simple-icons-vue
-  to: /use-mdc-stream
-  ---
-  #title
-  [Vue 3 composables]{.text-primary} included
-
-  #description
-  Reactive streaming with useMDCStream composable. State management, progress tracking, and error handling built-in. Works with Nuxt 4 and Vue 3.
-  :::
-
-  :::u-page-feature
-  ---
   icon: i-simple-icons-typescript
-  to: /parse-api#types
+  to: /api/reference
   ---
   #title
   [Full TypeScript]{.text-primary} support
 
   #description
-  Complete type definitions for all APIs, AST nodes, and Vue components. Get autocomplete and type safety throughout your project.
+  Complete type definitions for all APIs, AST nodes, and components. Get autocomplete and type safety throughout your project.
   :::
 ::
+
+:landing-typography
+
+:landing-gfm
+
+:landing-code-block
+
+:landing-cjk
