@@ -56,11 +56,12 @@
     "vitest": "^4.0.18"
   },
   "dependencies": {
-    "mdc-syntax": "link:.",
     "markdown-it": "^14.1.0",
     "markdown-it-mdc": "^0.2.8",
+    "mdc-syntax": "link:.",
     "minimark": "https://pkg.pr.new/minimark@76668bf",
     "remark-mdc": "^3.10.0",
-    "shiki": "^3.21.0"
+    "shiki": "^3.21.0",
+    "shiki-stream": "^0.1.4"
   }
 }
