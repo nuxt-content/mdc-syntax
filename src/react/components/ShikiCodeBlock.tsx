@@ -41,8 +41,8 @@ export const ShikiCodeBlock: React.FC<ShikiCodeBlockProps> = ({
   language: propLanguage,
   theme = 'github-dark',
   containerClass = 'my-4',
-  fallbackClass = 'bg-neutral-800 text-neutral-200 p-4 rounded-lg overflow-x-auto border border-neutral-700',
-  fallbackWithHeaderClass = 'bg-neutral-800 text-neutral-200 p-4 pt-12 rounded-lg overflow-x-auto m-0 border border-neutral-700',
+  fallbackClass = 'bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 p-4 rounded-lg overflow-x-auto border border-neutral-300 dark:border-neutral-700',
+  fallbackWithHeaderClass = 'bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 p-4 pt-12 rounded-lg overflow-x-auto m-0 border border-neutral-300 dark:border-neutral-700',
   children,
 }) => {
   const [highlighter, setHighlighter] = useState<HighlighterCore | null>(null)
@@ -152,7 +152,7 @@ export const ShikiCodeBlock: React.FC<ShikiCodeBlockProps> = ({
         {/* Language label */}
         {language
           ? (
-              <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400 bg-neutral-800/80 px-2.5 py-1 rounded backdrop-blur-sm">
+              <span className="text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 bg-neutral-200/80 dark:bg-neutral-800/80 px-2.5 py-1 rounded backdrop-blur-sm">
                 {language}
               </span>
             )
@@ -163,7 +163,7 @@ export const ShikiCodeBlock: React.FC<ShikiCodeBlockProps> = ({
         {/* Copy button */}
         <button
           type="button"
-          className="ml-auto px-3 py-1.5 text-xs font-medium rounded transition-all duration-200 bg-neutral-700/80 hover:bg-neutral-600 text-neutral-300 hover:text-white backdrop-blur-sm opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="ml-auto px-3 py-1.5 text-xs font-medium rounded transition-all duration-200 bg-neutral-300/80 dark:bg-neutral-700/80 hover:bg-neutral-400 dark:hover:bg-neutral-600 text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white backdrop-blur-sm opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           onClick={copyCode}
         >
           {copied
@@ -208,11 +208,11 @@ export const ShikiCodeBlock: React.FC<ShikiCodeBlockProps> = ({
 
       {/* Loading state */}
       {isLoading && (
-        <div className="bg-neutral-800 rounded-lg p-4 border border-neutral-700">
+        <div className="bg-neutral-100 dark:bg-neutral-800 rounded-lg p-4 border border-neutral-300 dark:border-neutral-700">
           {[1, 2, 3].map(i => (
             <div
               key={i}
-              className={`h-4 bg-neutral-700 rounded mb-2 ${i === 3 ? 'w-3/5 mb-0' : ''} animate-pulse`}
+              className={`h-4 bg-neutral-300 dark:bg-neutral-700 rounded mb-2 ${i === 3 ? 'w-3/5 mb-0' : ''} animate-pulse`}
             />
           ))}
         </div>

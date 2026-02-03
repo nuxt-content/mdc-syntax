@@ -275,10 +275,10 @@ function reset() {
     <!-- Two Column Layout -->
     <div class="flex-1 grid grid-cols-3 overflow-hidden">
       <!-- Rendered Output Column -->
-      <div class="flex flex-col overflow-hidden bg-neutral-950 col-span-2">
-        <div class="flex justify-between items-center px-4 py-3 bg-neutral-900 border-b border-neutral-800 flex-shrink-0">
+      <div class="flex flex-col overflow-hidden bg-white dark:bg-neutral-950 col-span-2">
+        <div class="flex justify-between items-center px-4 py-3 bg-neutral-100 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 flex-shrink-0">
           <div class="flex items-center gap-2">
-            <h3 class="text-neutral-200 font-semibold">
+            <h3 class="text-neutral-800 dark:text-neutral-200 font-semibold">
               Rendered Output
             </h3>
             <UBadge
@@ -315,7 +315,7 @@ function reset() {
           />
           <div
             v-else
-            class="text-center text-neutral-600 py-12"
+            class="text-center text-neutral-500 dark:text-neutral-600 py-12"
           >
             Click "Start" to see the renderer in action
           </div>
@@ -323,9 +323,9 @@ function reset() {
       </div>
 
       <!-- Markdown Column -->
-      <div class="flex flex-col overflow-hidden bg-neutral-950 border-l border-neutral-800">
-        <div class="flex justify-between items-center px-4 py-3 bg-neutral-900 border-b border-neutral-800 flex-shrink-0">
-          <h3 class="text-neutral-200 font-semibold">
+      <div class="flex flex-col overflow-hidden bg-white dark:bg-neutral-950 border-l border-neutral-200 dark:border-neutral-800">
+        <div class="flex justify-between items-center px-4 py-3 bg-neutral-100 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 flex-shrink-0">
+          <h3 class="text-neutral-800 dark:text-neutral-200 font-semibold">
             Markdown
           </h3>
           <UBadge
@@ -341,11 +341,11 @@ function reset() {
         >
           <pre
             v-if="elementsCount > 0"
-            class="text-xs text-neutral-400 leading-relaxed"
+            class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed"
           >{{ state.content }}</pre>
           <div
             v-else
-            class="text-center text-neutral-600 py-12"
+            class="text-center text-neutral-500 dark:text-neutral-600 py-12"
           >
             Markdown will appear here
           </div>
@@ -362,15 +362,27 @@ function reset() {
 }
 
 :deep(.overflow-y-auto::-webkit-scrollbar-track) {
-  background: rgb(30 41 59);
+  background: rgb(229 231 235);
 }
 
 :deep(.overflow-y-auto::-webkit-scrollbar-thumb) {
-  background: rgb(71 85 105);
+  background: rgb(156 163 175);
   border-radius: 4px;
 }
 
 :deep(.overflow-y-auto::-webkit-scrollbar-thumb:hover) {
+  background: rgb(107 114 128);
+}
+
+.dark :deep(.overflow-y-auto::-webkit-scrollbar-track) {
+  background: rgb(30 41 59);
+}
+
+.dark :deep(.overflow-y-auto::-webkit-scrollbar-thumb) {
+  background: rgb(71 85 105);
+}
+
+.dark :deep(.overflow-y-auto::-webkit-scrollbar-thumb:hover) {
   background: rgb(100 116 139);
 }
 </style>

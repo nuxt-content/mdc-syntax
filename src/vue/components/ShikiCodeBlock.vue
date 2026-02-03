@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<{
 }>(), {
   theme: 'github-dark',
   containerClass: 'my-4',
-  fallbackClass: 'bg-neutral-800 text-neutral-200 p-4 rounded-lg overflow-x-auto border border-neutral-700',
+  fallbackClass: 'bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 p-4 rounded-lg overflow-x-auto border border-neutral-300 dark:border-neutral-700',
 })
 
 const componentKey = ref(0)
@@ -63,10 +63,10 @@ async function copyCode() {
 <template>
   <div :class="`relative ${containerClass} group rounded-lg`">
     <!-- Header with language label and copy button -->
-    <div class="rounded-t-lg border border-b-0 border-neutral-700 top-[-1.5rem] right-0 left-0 flex items-center justify-between px-4 py-2 z-10">
+    <div class="rounded-t-lg border border-b-0 border-neutral-300 dark:border-neutral-700 top-[-1.5rem] right-0 left-0 flex items-center justify-between px-4 py-2 z-10">
       <!-- Language label -->
       <span
-        class="font-mono font-semibold tracking-wider text-neutral-400 bg-neutral-800/80 px-2.5 py-1 rounded backdrop-blur-sm"
+        class="font-mono font-semibold tracking-wider text-neutral-600 dark:text-neutral-400 bg-neutral-200/80 dark:bg-neutral-800/80 px-2.5 py-1 rounded backdrop-blur-sm"
       >
         {{ filename || language }}
       </span>
@@ -74,7 +74,7 @@ async function copyCode() {
       <!-- Copy button -->
       <button
         type="button"
-        class="ml-auto px-3 py-1.5 text-xs font-medium rounded transition-all duration-200 bg-neutral-700/80 hover:bg-neutral-600 text-neutral-300 hover:text-white backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        class="ml-auto px-3 py-1.5 text-xs font-medium rounded transition-all duration-200 bg-neutral-300/80 dark:bg-neutral-700/80 hover:bg-neutral-400 dark:hover:bg-neutral-600 text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         @click="copyCode"
       >
         <span
@@ -119,6 +119,6 @@ async function copyCode() {
     </div>
 
     <!-- Shiki renderer -->
-    <pre class="shiki-container bg-neutral-800 rounded-b-lg pt-16 p-4 border border-neutral-700"><slot /></pre>
+    <pre class="shiki-container bg-neutral-100 dark:bg-neutral-800 rounded-b-lg pt-16 p-4 border border-neutral-300 dark:border-neutral-700"><slot /></pre>
   </div>
 </template>

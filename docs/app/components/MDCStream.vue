@@ -56,7 +56,7 @@ defineExpose({
   <div>
     <MDC
       v-if="markdown"
-      class="prose prose-invert max-w-none"
+      class="prose dark:prose-invert max-w-none"
       :markdown="accumulated"
       :options="{
         highlight: {

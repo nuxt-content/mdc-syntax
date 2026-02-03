@@ -255,7 +255,7 @@ async function copyMarkdown() {
                 <label class="text-xs font-medium">Preset:</label>
                 <select
                   v-model="selectedPresetValue"
-                  class="px-2 py-1 text-xs border rounded dark:bg-neutral-800 dark:border-neutral-600"
+                  class="px-2 py-1 text-xs border rounded bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600"
                   @change="loadSelectedPreset"
                 >
                   <option
@@ -275,7 +275,7 @@ async function copyMarkdown() {
                     ▶ Start
                   </button>
                   <button
-                    class="px-2 py-1 text-xs border border-neutral-300 rounded hover:bg-neutral-50 dark:border-neutral-600 dark:hover:bg-neutral-800 disabled:opacity-50 transition"
+                    class="px-2 py-1 text-xs border border-neutral-300 dark:border-neutral-600 rounded hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-50 transition bg-white dark:bg-neutral-900"
                     :disabled="!isStreaming && !streamState.isComplete"
                     title="Reset"
                     @click="resetStream"
@@ -393,7 +393,7 @@ async function copyMarkdown() {
             <div class="p-2">
               <textarea
                 v-model="markdownContent"
-                class="w-full h-[calc(100vh-380px)] min-h-[300px] p-3 font-mono text-xs border rounded focus:ring-1 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-600 resize-none"
+                class="w-full h-[calc(100vh-380px)] min-h-[300px] p-3 font-mono text-xs border rounded focus:ring-1 focus:ring-blue-500 bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 resize-none"
                 placeholder="Enter your markdown here..."
                 :disabled="isStreaming"
               />

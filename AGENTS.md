@@ -28,6 +28,15 @@ src/
     ├── token-processor.ts # markdown-it token to Minimark AST conversion
     ├── table-of-contents.ts # TOC generation
     └── shiki-highlighter.ts # Syntax highlighting
+
+examples/
+├── vue-vite/             # Vue 3 + Vite + Tailwind CSS v4 example
+└── react-vite/           # React 19 + Vite + Tailwind CSS v4 example
+
+test/                     # Vitest test files
+playground/               # Nuxt playground for development
+docs/                     # Documentation site (Docus-based)
+skills/                   # AI agent skills definitions
 ```
 
 ## Package Exports
@@ -185,10 +194,20 @@ Example:
 
 ### MDC Component (High-level)
 
-Accepts markdown string, handles parsing internally:
+Accepts markdown string, handles parsing internally.
+
+**Vue** (requires `<Suspense>` wrapper since MDC is async):
 
 ```vue
-<MDC :markdown="content" :components="customComponents" />
+<Suspense>
+  <MDC :markdown="content" :components="customComponents" />
+</Suspense>
+```
+
+**React**:
+
+```tsx
+<MDC markdown={content} components={customComponents} />
 ```
 
 ### MDCRenderer Component (Low-level)
@@ -229,6 +248,7 @@ Use MDCRenderer when:
 
 ```bash
 pnpm dev          # Run playground (Nuxt)
+pnpm dev:vue      # Run Vue example (Vite)
 pnpm dev:react    # Run React example (Vite)
 pnpm docs         # Run documentation site
 pnpm test         # Run tests
@@ -236,6 +256,46 @@ pnpm lint         # Run ESLint
 pnpm typecheck    # Run TypeScript check
 pnpm verify       # Run lint + test + typecheck
 ```
+
+## Examples
+
+Interactive examples are in `examples/`:
+
+### Vue/Vite Example (`examples/vue-vite/`)
+
+```bash
+pnpm dev:vue
+```
+
+Features:
+- Editor mode with live preview
+- Streaming demo showing auto-close in action
+- Custom component registration (alert, h1)
+- Light/dark mode support via Tailwind CSS v4
+- Uses `<Suspense>` wrapper for async MDC component
+
+Key files:
+- `src/App.vue` - Main app with editor/streaming modes
+- `src/components/StreamingPreview.vue` - Streaming demo component
+- `src/components/CustomAlert.vue` - Custom alert component
+- `src/components/CustomHeading.vue` - Custom heading component
+
+### React/Vite Example (`examples/react-vite/`)
+
+```bash
+pnpm dev:react
+```
+
+Features:
+- Same feature set as Vue example
+- Uses React hooks (useState, useMemo)
+- Custom component registration
+
+Key files:
+- `src/App.tsx` - Main app
+- `src/components/StreamingPreview.tsx` - Streaming demo
+- `src/components/CustomAlert.tsx` - Custom alert
+- `src/components/CustomHeading.tsx` - Custom heading
 
 ## Documentation Maintenance
 

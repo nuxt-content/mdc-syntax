@@ -39,7 +39,7 @@
             </svg>
           </div>
         </div>
-        <UCard class="bg-neutral-900 dark:bg-neutral-950 border border-neutral-700 dark:border-neutral-800 h-[400px] overflow-auto transition-all duration-300 hover:border-neutral-600 dark:hover:border-neutral-700 hover:shadow-lg">
+        <UCard class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 h-[400px] overflow-auto transition-all duration-300 hover:border-neutral-300 dark:hover:border-neutral-700 hover:shadow-lg">
           <MarkdownItStream
             ref="markdownItRef"
             :markdown="markdown"
@@ -67,7 +67,7 @@
             </svg>
           </div>
         </div>
-        <UCard class="bg-neutral-900 dark:bg-neutral-950 border border-primary-500/30 dark:border-primary-500/30 h-[400px] overflow-auto transition-all duration-300 hover:border-primary-500/50 dark:hover:border-primary-500/50 hover:shadow-xl hover:shadow-primary-500/10">
+        <UCard class="bg-white dark:bg-neutral-950 border border-primary-500/30 dark:border-primary-500/30 h-[400px] overflow-auto transition-all duration-300 hover:border-primary-500/50 dark:hover:border-primary-500/50 hover:shadow-xl hover:shadow-primary-500/10">
           <MDCStream
             ref="mdcRef"
             :markdown="markdown"

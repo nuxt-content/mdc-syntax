@@ -60,7 +60,7 @@ defineExpose({
 <template>
   <div>
     <div
-      class="prose prose-invert max-w-none"
+      class="prose dark:prose-invert max-w-none"
       v-html="html"
     />
   </div>
