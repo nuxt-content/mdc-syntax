@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import LandingGetStarted from '~/components/landing/LandingGetStarted.vue'
 import LandingTypography from '~/components/landing/LandingTypography.vue'
-import LandingGFM from '~/components/landing/LandingGFM.vue'
-import LandingCJK from '~/components/landing/LandingCJK.vue'
+import LandingGfm from '~/components/landing/LandingGfm.vue'
+import LandingCjk from '~/components/landing/LandingCjk.vue'
 import LandingCodeBlock from '~/components/landing/LandingCodeBlock.vue'
 
 useHead({
@@ -190,8 +190,8 @@ async function copyToClipboard(text: string) {
 
         <!-- Feature Comparisons -->
         <LandingTypography />
-        <LandingGFM />
-        <LandingCJK />
+        <LandingGfm />
+        <LandingCjk />
         <LandingCodeBlock />
       </UContainer>
     </div>

@@ -14,13 +14,6 @@ const components = {
   // Streaming components
   MDCStream: () => import('@/components/MDCStream.vue'),
   MarkdownItStream: () => import('@/components/MarkdownItStream.vue'),
-
-  // Placeholder components for demo purposes
-  Alert: () => import('@/components/demo/Alert.vue'),
-  Card: () => import('@/components/demo/Card.vue'),
-  AppLogo: () => import('@/components/demo/AppLogo.vue'),
-  MultiSlotTest: () => import('@/components/demo/MultiSlotTest.vue'),
-  RequiredPropTest: () => import('@/components/demo/RequiredPropTest.vue'),
 }
 
 export default async function resolveComponent(name: string) {

@@ -84,7 +84,7 @@ Everything you need for modern content parsing
   :::u-page-feature
   ---
   icon: i-lucide-puzzle
-  to: /rendering/vue-renderer
+  to: /rendering/vue
   ---
   #title
   [Vue component]{.text-primary} integration
