@@ -15,6 +15,7 @@
     "dev:react": "pnpm --filter mdc-syntax-react-example run dev",
     "dev:vue": "pnpm --filter mdc-syntax-vue-example run dev",
     "docs": "nuxt dev --extends docus docs",
+    "prepack": "pnpm build",
     "build": "pnpm --filter './packages/**' run build",
     "test": "pnpm --filter 'mdc-syntax' run test && pnpm --filter '@mdc-syntax/*' run test",
     "lint": "eslint .",
