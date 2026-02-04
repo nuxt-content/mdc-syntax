@@ -53,7 +53,7 @@ const components = {
 
 <template>
   <Suspense>
-    <MDC :markdown="markdown" :components="components" :plugins="[mathPlugin]" />
+    <MDC :markdown="markdown" :components="components" :options="{ plugins: [mathPlugin] }" />
   </Suspense>
 </template>
 ```
@@ -86,7 +86,7 @@ $$
 $$
   `
 
-  return <MDC markdown={markdown} components={components} plugins={[mathPlugin]} />
+  return <MDC markdown={markdown} components={components} options={{ plugins: [mathPlugin] }} />
 }
 ```
 

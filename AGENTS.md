@@ -128,7 +128,7 @@ $$
 </script>
 
 <template>
-  <MDC :markdown="markdown" :components="components" :plugins="[mathPlugin]" />
+  <MDC :markdown="markdown" :components="components" :options="{ plugins: [mathPlugin] }" />
 </template>
 ```
 
@@ -148,7 +148,7 @@ $$
 $$
 `
 
-<MDC markdown={markdown} components={components} plugins={[mathPlugin]} />
+<MDC markdown={markdown} components={components} options={{ plugins: [mathPlugin] }} />
 ```
 
 **Code blocks:**
