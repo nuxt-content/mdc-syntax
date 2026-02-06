@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   markdown-it-mdc:
-    hash: 981b7994599d585b60159a9ddc752a6ca8c989c6acb2459a0333638448f2a8a6
+    hash: ed66ea5bc7c090e3fe868858fa17a8bef734622bd7613c781edb19deb8af4f88
     path: patches/markdown-it-mdc.patch
 
 importers:
@@ -164,7 +164,7 @@ importers:
         version: 14.1.0
       markdown-it-mdc:
         specifier: ^0.2.9
-        version: 0.2.9(patch_hash=981b7994599d585b60159a9ddc752a6ca8c989c6acb2459a0333638448f2a8a6)(@types/markdown-it@14.1.2)(markdown-it@14.1.0)
+        version: 0.2.9(patch_hash=ed66ea5bc7c090e3fe868858fa17a8bef734622bd7613c781edb19deb8af4f88)(@types/markdown-it@14.1.2)(markdown-it@14.1.0)
       minimark:
         specifier: https://pkg.pr.new/minimark@24c408f
         version: https://pkg.pr.new/minimark@24c408f
@@ -13918,7 +13918,7 @@ snapshots:
     optionalDependencies:
       temml: 0.11.11
 
-  markdown-it-mdc@0.2.9(patch_hash=981b7994599d585b60159a9ddc752a6ca8c989c6acb2459a0333638448f2a8a6)(@types/markdown-it@14.1.2)(markdown-it@14.1.0):
+  markdown-it-mdc@0.2.9(patch_hash=ed66ea5bc7c090e3fe868858fa17a8bef734622bd7613c781edb19deb8af4f88)(@types/markdown-it@14.1.2)(markdown-it@14.1.0):
     dependencies:
       '@types/markdown-it': 14.1.2
       markdown-it: 14.1.0

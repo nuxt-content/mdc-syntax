@@ -35,7 +35,7 @@ export function applyAutoUnwrap(node: MinimarkNode): MinimarkNode {
   }
 
   // Check if we have exactly one paragraph child (and possibly empty text nodes)
-  if (nonEmptyChildren.length > 1 || nonEmptyChildren[0][0] !== 'p') {
+  if (nonEmptyChildren.length > 1 || typeof nonEmptyChildren[0] === 'string' || nonEmptyChildren[0][0] !== 'p') {
     return [
       tag,
       props,

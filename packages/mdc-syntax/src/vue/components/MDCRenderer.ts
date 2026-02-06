@@ -2,6 +2,7 @@ import type { PropType, VNode } from 'vue'
 import type { MinimarkElement, MinimarkNode, MinimarkTree } from 'minimark'
 import { computed, defineAsyncComponent, defineComponent, h, onErrorCaptured, ref } from 'vue'
 import { standardProseComponents } from './prose/standard'
+import { pascalCase } from 'scule'
 
 // Cache for dynamically resolved components
 const asyncComponentCache = new Map<string, any>()
@@ -77,7 +78,7 @@ function renderNode(
     let customComponent = tag
 
     if ((parent as MinimarkElement | undefined)?.[0] !== 'pre') {
-      customComponent = components[tag]
+      customComponent = components[tag] || components[pascalCase(tag)]
       // If not in components map and manifest is provided, try dynamic resolution
       if (!customComponent && componentsManifest) {
         // Check cache first to avoid creating duplicate async components

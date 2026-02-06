@@ -1,8 +1,85 @@
 diff --git a/dist/index.mjs b/dist/index.mjs
-index 92c4dc2d11f8350c8539a624ac9589d696228448..923662ae47f46516b9b17f9074217ff1de2af445 100644
+index 92c4dc2d11f8350c8539a624ac9589d696228448..f7067557764763057c83a5ea5dacfe1f2210b1eb 100644
 --- a/dist/index.mjs
 +++ b/dist/index.mjs
-@@ -239,6 +239,10 @@ const MarkdownItMdcBlock = (md) => {
+@@ -1,6 +1,58 @@
+ import { parse } from 'yaml';
+ import TokenClass from 'markdown-it/lib/token.mjs';
+ 
++const NUMBER_CHAR_RE = /\d/;
++const STR_SPLITTERS = ["-", "_", "/", "."];
++function isUppercase(char = "") {
++  if (NUMBER_CHAR_RE.test(char)) {
++    return void 0;
++  }
++  return char !== char.toLowerCase();
++}
++function splitByCase(str, separators) {
++  const splitters = STR_SPLITTERS;
++  const parts = [];
++  if (!str || typeof str !== "string") {
++    return parts;
++  }
++  let buff = "";
++  let previousUpper;
++  let previousSplitter;
++  for (const char of str) {
++    const isSplitter = splitters.includes(char);
++    if (isSplitter === true) {
++      parts.push(buff);
++      buff = "";
++      previousUpper = void 0;
++      continue;
++    }
++    const isUpper = isUppercase(char);
++    if (previousSplitter === false) {
++      if (previousUpper === false && isUpper === true) {
++        parts.push(buff);
++        buff = char;
++        previousUpper = isUpper;
++        continue;
++      }
++      if (previousUpper === true && isUpper === false && buff.length > 1) {
++        const lastChar = buff.at(-1);
++        parts.push(buff.slice(0, Math.max(0, buff.length - 1)));
++        buff = lastChar + char;
++        previousUpper = isUpper;
++        continue;
++      }
++    }
++    buff += char;
++    previousUpper = isUpper;
++    previousSplitter = isSplitter;
++  }
++  parts.push(buff);
++  return parts;
++}
++function kebabCase(str, joiner) {
++  return str ? (Array.isArray(str) ? str : splitByCase(str)).map((p) => p.toLowerCase()).join("-") : "";
++}
++
+ function parseBracketContent(str, startIndex) {
+   if (str[startIndex] !== "[")
+     return null;
+@@ -130,7 +182,7 @@ function searchProps(content, index = 0) {
+   };
+ }
+ 
+-const RE_BLOCK_NAME = /^[a-z$][$\w.-]*/;
++const RE_BLOCK_NAME = /^[a-z$][$\w.-]*/i;
+ function parseBlockParams(str) {
+   str = str.trim();
+   if (!str)
+@@ -162,7 +214,7 @@ function parseBlockParams(str) {
+     unparsedRemaining = remaining;
+   }
+   const result = {
+-    name
++    name: kebabCase(name)
+   };
+   if (content !== void 0) {
+     result.content = content;
+@@ -239,6 +291,10 @@ const MarkdownItMdcBlock = (md) => {
        let start = state.bMarks[startLine] + state.tShift[startLine];
        let max = state.eMarks[startLine];
        const indent = state.sCount[startLine];
@@ -13,7 +90,7 @@ index 92c4dc2d11f8350c8539a624ac9589d696228448..923662ae47f46516b9b17f9074217ff1
        if (state.src[start] !== ":")
          return false;
        for (pos = start + 1; pos <= max; pos++) {
-@@ -265,7 +269,32 @@ const MarkdownItMdcBlock = (md) => {
+@@ -265,7 +321,32 @@ const MarkdownItMdcBlock = (md) => {
          if (start < max && state.sCount[nextLine] < state.blkIndent) {
            break;
          }
@@ -47,23 +124,23 @@ index 92c4dc2d11f8350c8539a624ac9589d696228448..923662ae47f46516b9b17f9074217ff1
            continue;
          for (pos = start + 1; pos <= max; pos++) {
            if (marker_str !== state.src[pos])
-@@ -274,8 +303,14 @@ const MarkdownItMdcBlock = (md) => {
+@@ -274,8 +355,14 @@ const MarkdownItMdcBlock = (md) => {
          if (pos - start !== marker_count)
            continue;
          pos = state.skipSpaces(pos);
 -        if (pos < max)
 +        if (pos < max) {
 +          nestingDepth++;
-+          continue;
+           continue;
 +        }
 +        if (nestingDepth > 0) {
 +          nestingDepth--;
-           continue;
++          continue;
 +        }
          auto_closed = true;
          break;
        }
-@@ -349,7 +384,7 @@ const MarkdownItMdcBlock = (md) => {
+@@ -349,7 +436,7 @@ const MarkdownItMdcBlock = (md) => {
          const yaml = state.src.slice(state.bMarks[startLine + 1], state.eMarks[lineEnd - 1]);
          const data = parse(yaml);
          const token = state.env.mdcBlockTokens[0];
