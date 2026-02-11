@@ -1,7 +1,7 @@
 {
-  "name": "@mdc-syntax/monorepo",
+  "name": "mdc-syntax-monorepo",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "packageManager": "pnpm@10.29.2",
   "description": "MDC Syntax monorepo",
@@ -21,9 +21,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "verify": "pnpm run lint && pnpm run test && pnpm run typecheck",
-    "release": "release-it",
-    "release:dry": "release-it --dry-run",
-    "release:pkg": "pnpm --filter",
+    "release": "pnpm --filter 'mdc-syntax' run release && pnpm --filter '@mdc-syntax/cjk' run release && pnpm --filter '@mdc-syntax/math' run release",
+    "release:dry": "pnpm --filter 'mdc-syntax' run release:dry && pnpm --filter '@mdc-syntax/cjk' run release:dry && pnpm --filter '@mdc-syntax/math' run release:dry",
     "postinstall": "pnpm --filter 'mdc-syntax' run build --stub && pnpm --filter '@mdc-syntax/*' run build --stub"
   },
   "devDependencies": {
