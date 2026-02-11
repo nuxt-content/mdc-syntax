@@ -83,10 +83,12 @@ export default function App() {
         <MDC
           v-show="activeTab === 'vue'"
           :markdown="codeSnippets.vue"
+          :options="{ highlight: true }"
         />
         <MDC
           v-show="activeTab === 'react'"
           :markdown="codeSnippets.react"
+          :options="{ highlight: true }"
         />
 
         <!-- Feature Highlights -->

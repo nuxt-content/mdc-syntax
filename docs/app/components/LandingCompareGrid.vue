@@ -5,13 +5,11 @@
   >
     <!-- Section Header -->
     <div class="text-center mb-12">
-      <UBadge
-        variant="subtle"
-        size="lg"
-        class="mb-4"
+      <h2
+        class="text-2xl font-bold text-neutral-900 dark:text-white sm:text-3xl mb-4"
       >
         {{ title }}
-      </UBadge>
+      </h2>
       <p class="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
         {{ description }}
       </p>

@@ -1,12 +1,12 @@
 ---
 seo:
-  title: MDC Syntax - Modern Markdown Component Parser
+  title: Markdown but with dynamic Components
   description: Fast, streaming-ready markdown parser with Vue and React component support. Parse MDC content from strings or streams with TypeScript support.
 ---
 
 ::landing-hero
 #title
-Markdown but with Components
+Markdown but with dynamic Components
 
 #description
 Fast, streaming-ready markdown parser with full MDC (Markdown Component) syntax support.
