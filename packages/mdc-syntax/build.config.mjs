@@ -12,10 +12,22 @@ export default defineBuildConfig({
       outDir: './dist/vue',
     },
     {
+      type: 'transform',
+      input: './src/utils',
+      outDir: './dist/utils',
+    },
+    {
       type: 'bundle',
-      input: './src/react/index.ts',
+      input: [
+        './src/react/index.ts',
+        './src/react/components/MDC.tsx',
+        './src/react/components/MDCRenderer.tsx',
+        './src/react/components/index.tsx',
+        './src/react/components/stream.tsx',
+        './src/react/components/prose/ProsePre.tsx',
+        './src/react/components/prose/ProsePreShiki.tsx',
+      ],
       outDir: './dist',
-      name: 'react/index',
     },
   ],
 })

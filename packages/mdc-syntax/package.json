@@ -19,6 +19,7 @@
     "./vue": "./dist/vue/index.mjs",
     "./vue/*": "./dist/vue/*.mjs",
     "./react": "./dist/react/index.mjs",
+    "./react/*": "./dist/react/*.mjs",
     "./stream": "./dist/stream.mjs"
   },
   "main": "./dist/index.mjs",
