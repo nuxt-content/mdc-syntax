@@ -222,26 +222,31 @@ export async function* parseStreamIncremental(
         const chunkStr = new TextDecoder('utf-8').decode(value)
         accumulatedContent += chunkStr
 
-        // Parse frontmatter if not already done
-        if (!frontmatterParsed) {
-          const { data } = parseFrontmatter(accumulatedContent)
-          frontmatterData = data
-          frontmatterParsed = true
+        try {
+          // Parse frontmatter if not already done
+          if (!frontmatterParsed) {
+            const { data } = parseFrontmatter(accumulatedContent)
+            frontmatterData = data
+            frontmatterParsed = true
+          }
+
+          // Auto-close unclosed syntax before parsing intermediate results
+          const closedContent = autoCloseMarkdown(accumulatedContent)
+
+          // Parse the auto-closed content
+          const result = parse(closedContent, options)
+
+          yield {
+            chunk: chunkStr,
+            body: result.body,
+            data: frontmatterData,
+            isComplete: false,
+            excerpt: result.excerpt,
+            content: accumulatedContent,
+          }
         }
-
-        // Auto-close unclosed syntax before parsing intermediate results
-        const closedContent = autoCloseMarkdown(accumulatedContent)
-
-        // Parse the auto-closed content
-        const result = parse(closedContent, options)
-
-        yield {
-          chunk: chunkStr,
-          body: result.body,
-          data: frontmatterData,
-          isComplete: false,
-          excerpt: result.excerpt,
-          content: accumulatedContent,
+        catch {
+        // noop: errors in streaming are expected due to invalid yaml syntax
         }
       }
     }
@@ -250,15 +255,3 @@ export async function* parseStreamIncremental(
     }
   }
 }
-
-/**
- * Alias for parseStream() - kept for backward compatibility
- * @internal
- */
-export const parseStreamWithMarkdownIt = parseStream
-
-/**
- * Alias for parseStreamIncremental() - kept for backward compatibility
- * @internal
- */
-export const parseStreamIncrementalWithMarkdownIt = parseStreamIncremental
