@@ -11,5 +11,5 @@
     "skipDefaultLibCheck": true,
     "skipLibCheck": true
   },
-  "exclude": ["playground"]
+  "exclude": ["playground", "examples"]
 }
