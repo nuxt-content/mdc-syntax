@@ -4,15 +4,16 @@ interface CaretOptions {
   class?: string
 }
 
+const CARET_TEXT = ' ' // thin space is used to avoid wide spaces between text and caret
 export function getCaret(options: boolean | CaretOptions): MinimarkElement | null {
   if (options === true) {
-    return ['span', { key: 'stream-caret', class: 'bg-white w-1 h-6 inline-block mb-[-2px] mx-1 animate-[pulse_0.75s_cubic-bezier(0.4,0,0.6,1)_infinite]' }]
+    return ['span', { key: 'stream-caret', class: 'bg-current inline-block mx-1 animate-[pulse_0.75s_cubic-bezier(0.4,0,0.6,1)_infinite]' }, CARET_TEXT]
   }
   if (typeof options === 'object') {
     return ['span', {
       key: 'stream-caret',
-      class: 'bg-white w-1 h-6 inline-block mb-[-2px] mx-1 animate-[pulse_0.75s_cubic-bezier(0.4,0,0.6,1)_infinite] ' + (options?.class || ''),
-    }]
+      class: 'bg-current inline-block mx-1 animate-[pulse_0.75s_cubic-bezier(0.4,0,0.6,1)_infinite] ' + (options?.class || ''),
+    }, CARET_TEXT]
   }
 
   return null
@@ -23,7 +24,7 @@ export function findLastTextNodeAndAppendNode(parent: MinimarkElement, nodeToApp
   for (let i = parent.length - 1; i >= 2; i--) {
     const node = parent[i]
 
-    if (typeof node === 'string') {
+    if (typeof node === 'string' && parent[1]?.key !== 'stream-caret') {
       // Found a text node - insert stream indicator after it
       parent.push(nodeToAppend)
 
