@@ -1,9 +1,10 @@
 import type { PropType, VNode } from 'vue'
 import type { MinimarkElement, MinimarkNode, MinimarkTree } from 'minimark'
-import { computed, defineAsyncComponent, defineComponent, h, onErrorCaptured, ref, toRaw } from 'vue'
+import { computed, defineAsyncComponent, defineComponent, h, inject, onErrorCaptured, ref, toRaw } from 'vue'
 import { standardProseComponents } from '.'
 import { pascalCase } from 'scule'
 import { findLastTextNodeAndAppendNode, getCaret } from '../../utils/caret'
+import type { ComponentManifest, MDCProvider } from '../../types'
 
 // Cache for dynamically resolved components
 const asyncComponentCache = new Map<string, any>()
@@ -59,7 +60,7 @@ function renderNode(
   node: MinimarkNode,
   components: Record<string, any> = {},
   key?: string | number,
-  componentsManifest?: (name: string) => Promise<any>,
+  componentsManifest?: ComponentManifest,
   parent?: MinimarkNode,
 ): VNode | string | null {
   // Handle text nodes (strings)
@@ -87,7 +88,7 @@ function renderNode(
         if (!asyncComponentCache.has(cacheKey)) {
           const promise = componentsManifest(tag)
           if (promise) {
-            asyncComponentCache.set(cacheKey, defineAsyncComponent(() => promise))
+            asyncComponentCache.set(cacheKey, defineAsyncComponent(() => promise as Promise<any>))
           }
         }
         customComponent = asyncComponentCache.get(cacheKey)
@@ -240,7 +241,7 @@ export const MDCRenderer = defineComponent({
      * Used to resolve components that aren't in the components map
      */
     componentsManifest: {
-      type: Function as PropType<(name: string) => Promise<any>>,
+      type: Function as PropType<ComponentManifest>,
       default: undefined,
     },
 
@@ -283,10 +284,21 @@ export const MDCRenderer = defineComponent({
       return false
     })
 
+    const mdc = inject<MDCProvider>('mdc', { components: {}, componentManifest: () => null })
+
     const components = computed(() => ({
       ...standardProseComponents,
+      ...mdc?.components,
       ...props.components,
     }))
+
+    const componentManifest: ComponentManifest = (name: string) => {
+      let resolved = props.componentsManifest?.(name)
+      if (!resolved) {
+        resolved = mdc?.componentManifest(name)
+      }
+      return resolved || null
+    }
 
     const caret = computed<MinimarkElement | null>(() => getCaret(props.caret))
 
@@ -302,7 +314,7 @@ export const MDCRenderer = defineComponent({
       }
 
       const children = nodes
-        .map((node, index) => renderNode(node, components.value, index, props.componentsManifest))
+        .map((node, index) => renderNode(node, components.value, index, componentManifest))
         .filter((child): child is VNode | string => child !== null)
 
       // Wrap in a fragment

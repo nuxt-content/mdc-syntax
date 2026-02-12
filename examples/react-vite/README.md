@@ -39,7 +39,7 @@ export default defineConfig({
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
-    "mdc-syntax": "workspace:*",
+    "mdc-syntax": "^1.0.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },

@@ -26,5 +26,10 @@ export default defineBuildConfig({
       input: './src/utils',
       outDir: './dist/utils',
     },
+    {
+      type: 'transform',
+      input: './src/nuxt',
+      outDir: './dist/nuxt',
+    },
   ],
 })

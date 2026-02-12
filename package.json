@@ -14,6 +14,8 @@
     "dev:prepare": "nuxt prepare playground",
     "dev:react": "pnpm --filter mdc-syntax-react-vite run dev",
     "dev:vue": "pnpm --filter mdc-syntax-vue-vite run dev",
+    "dev:nuxt": "pnpm --filter mdc-syntax-nuxt run dev",
+    "dev:nuxt-ui": "pnpm --filter mdc-syntax-nuxt-ui run dev",
     "docs": "nuxt dev --extends docus docs",
     "prepack": "pnpm build",
     "build": "pnpm --filter './packages/**' run build",
