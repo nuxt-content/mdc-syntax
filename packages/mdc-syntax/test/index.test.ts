@@ -29,7 +29,7 @@ function parseTimeout(timeoutStr: string): number {
   const value = Number.parseInt(match[1], 10)
   const unit = match[2]
   const ms = unit === 's' ? value * 1000 : value
-  return ms + (process.env.GITHUB_ACTIONS ? 5 : 0) /* add 5ms to avoid random Github Actions failures */
+  return ms + (process.env.GITHUB_ACTIONS ? 10 : 0) /* add 10ms to avoid random Github Actions failures */
 }
 
 function extractFrontmatter(content: string): { timeouts?: TestCase['timeouts'], body: string, options?: TestCase['options'] } {
