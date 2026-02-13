@@ -62,7 +62,7 @@ import { Math } from '@mdc-syntax/math/react'
 
 function App() {
   const chatMessage = ...
-  return <MDC markdown={chatMessage} components={{ Math }} options={{ plugind: [cjkPlugin, mathPlugin] }} />
+  return <MDC markdown={chatMessage} components={{ Math }} options={{ plugins: [cjkPlugin, mathPlugin] }} />
 }
 ```
 

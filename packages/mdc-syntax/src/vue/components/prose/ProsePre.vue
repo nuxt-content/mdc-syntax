@@ -66,7 +66,7 @@ async function copyCode() {
     <div class="rounded-t-lg border border-b-0 border-neutral-300 dark:border-neutral-700 top-[-1.5rem] right-0 left-0 flex items-center justify-between px-4 py-2 z-10">
       <!-- Language label -->
       <span
-        class="font-mono font-semibold tracking-wider text-neutral-600 dark:text-neutral-400 bg-neutral-200/80 dark:bg-neutral-800/80 px-2.5 py-1 rounded backdrop-blur-sm"
+        class="font-mono text-sm font-semibold tracking-wider text-neutral-600 dark:text-neutral-400 bg-neutral-200/80 dark:bg-neutral-800/80 px-2.5 py-1 rounded backdrop-blur-sm"
       >
         {{ filename || language }}
       </span>

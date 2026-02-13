@@ -261,7 +261,7 @@ export const ShikiCodeBlock: React.FC<ShikiCodeBlockProps> = ({
       {/* Fallback with header padding */}
       {!isLoading && !stream && (
         <pre className={fallbackWithHeaderClass}>
-          <code className="font-mono text-sm leading-relaxed block whitespace-pre">
+          <code className="font-mono text-sm leading-tight block whitespace-pre">
             {codeContent}
           </code>
         </pre>

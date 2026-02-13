@@ -19,6 +19,13 @@ export default defineAppConfig({
   description: 'Markdown with Components',
   url: 'https://mdc-syntax.vercel.app',
 
+  ui: {
+    colors: {
+      primary: 'yellow',
+      neutral: 'neutral',
+    },
+  },
+
   docus: {
     footer: {
       credits: {

@@ -1,6 +1,4 @@
 import { createRoot } from 'react-dom/client'
-import { MDC } from 'mdc-syntax/react'
+import App from './App'
 
-const el = document.getElementById('root')!
-
-createRoot(el).render(<MDC markdown="# Hello *World*" />)
+createRoot(document.getElementById('root')!).render(<App />)

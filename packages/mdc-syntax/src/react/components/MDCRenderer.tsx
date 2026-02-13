@@ -1,7 +1,7 @@
 import type { MinimarkElement, MinimarkNode, MinimarkTree } from 'minimark'
 import React, { lazy, Suspense, useMemo } from 'react'
 import { standardProseComponents } from '.'
-import { camelCase } from 'scule'
+import { camelCase, pascalCase } from 'scule'
 import { findLastTextNodeAndAppendNode, getCaret } from '../../utils/caret'
 
 /**
@@ -125,8 +125,8 @@ function renderNode(
     const nodeProps = getProps(node)
     const children = getChildren(node)
 
-    // Check if there's a custom component for this tag
-    let customComponent = components[tag]
+    // Check if there's a custom component for this tag (exact match or PascalCase)
+    let customComponent = components[tag] || components[pascalCase(tag)]
 
     // If not in components map and manifest is provided, try dynamic resolution
     if (!customComponent && componentsManifest && !defaultTagMap[tag]) {

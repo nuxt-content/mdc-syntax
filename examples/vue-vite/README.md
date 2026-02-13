@@ -1,6 +1,7 @@
 ---
 title: Vue
 description: A minimal example showing how to use MDC Syntax with Vue 3 and Vite.
+icon: i-logos-vue
 ---
 
 ::code-tree{defaultValue="src/App.vue" expandAll}
