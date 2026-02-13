@@ -67,3 +67,9 @@ export default defineNuxtConfig({
 
 
 This example demonstrates the simplest way to use MDC Syntax with Nuxt - just add the `mdc-syntax/nuxt` module to your Nuxt config, and the `MDC` component will be automatically available in your templates. The module handles parsing and rendering automatically.
+
+## What does `mdc-syntax/nuxt` module do
+
+- Registers the `<MDC>` and `<MDCRenderer>` components in Nuxt for automatic import.
+- Registers the `~/components/mdc` directory in the app and all layers as a global components directory.
+  - This allows users to override prose components by creating components in this directory.

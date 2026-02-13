@@ -79,3 +79,10 @@ export default defineNuxtConfig({
 
 
 This example demonstrates how to use MDC Syntax with Nuxt UI. MDC Syntax automatically detects when Nuxt UI is installed and uses its components for rendering. Simply add both `mdc-syntax/nuxt` and `@nuxt/ui` modules to your Nuxt config, and the `MDC` component will use Nuxt UI components automatically.
+
+## What does `mdc-syntax/nuxt` module do
+
+- Registers the `<MDC>` and `<MDCRenderer>` components in Nuxt for automatic import.
+- Registers the `~/components/mdc` directory in the app and all layers as a global components directory.
+  - This allows users to override prose components by creating components in this directory.
+- Detects Nuxt UI and tells Nuxt UI to register its Prose components
