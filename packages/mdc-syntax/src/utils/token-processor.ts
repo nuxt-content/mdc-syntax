@@ -663,6 +663,11 @@ function processInlineToken(tokens: any[], startIndex: number, inHeading: boolea
     return { node: token.content || null, nextIndex: startIndex + 1 }
   }
 
+  // Handle emoji tokens (e.g., :rocket: -> 🚀)
+  if (token.type === 'emoji') {
+    return { node: token.content || null, nextIndex: startIndex + 1 }
+  }
+
   // Handle html_inline tokens (e.g., task list checkboxes)
   if (token.type === 'html_inline') {
     const parsed = parseHtmlInline(token.content || '')

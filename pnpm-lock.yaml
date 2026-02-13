@@ -170,8 +170,8 @@ importers:
         specifier: ^0.2.10
         version: 0.2.10(@types/markdown-it@14.1.2)(markdown-it@14.1.0)
       minimark:
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: https://pkg.pr.new/minimark@be5fdcd
+        version: https://pkg.pr.new/minimark@be5fdcd
       react:
         specifier: ^19.2.4
         version: 19.2.4
@@ -6267,8 +6267,9 @@ packages:
   minimark@0.2.0:
     resolution: {integrity: sha512-AmtWU9pO0C2/3AM2pikaVhJ//8E5rOpJ7+ioFQfjIq+wCsBeuZoxPd97hBFZ9qrI7DMHZudwGH3r8A7BMnsIew==}
 
-  minimark@1.0.0:
-    resolution: {integrity: sha512-4maJvB7opKTzIWeh0jIpWf6FbN/nU3UjsjDnlLuYixnLp4laKoQrCYfmKA71Qm+EV3SUsKvawO+1EBiu11+kBg==}
+  minimark@https://pkg.pr.new/minimark@be5fdcd:
+    resolution: {integrity: sha512-Eb5Vl4D/DtOsOETJaOVZTXd01Q1jVLIi+cm5pTPdyJD2aRSi8MBhK+K0ZAzLnkXA39bgg9FrVSzmMEaBIhCBqw==, tarball: https://pkg.pr.new/minimark@be5fdcd}
+    version: 1.0.0
 
   minimatch@10.1.1:
     resolution: {integrity: sha512-enIvLvRAFZYXJzkCYG5RKmPfrFArdLv+R+lbQ53BmIMLIry74bjKzX6iHAm8WYamJkhSSEabrWN5D97XnKObjQ==}
@@ -15021,7 +15022,7 @@ snapshots:
 
   minimark@0.2.0: {}
 
-  minimark@1.0.0:
+  minimark@https://pkg.pr.new/minimark@be5fdcd:
     dependencies:
       entities: 7.0.1
       js-yaml: 4.1.1

@@ -1,6 +1,7 @@
 import type { ParseOptions } from './types'
 import MarkdownIt from 'markdown-it'
 import pluginMdc from 'markdown-it-mdc'
+import markdownItEmoji from './utils/markdown-it-emoji'
 import markdownItTaskListsMdc from './utils/markdown-it-task-lists-mdc'
 import { applyAutoUnwrap } from './utils/auto-unwrap'
 import { generateToc } from './utils/table-of-contents'
@@ -89,6 +90,7 @@ export function parse(source: string, options: ParseOptions = {}): ParseResult {
     .enable(['table', 'strikethrough'])
     // Custom task list plugin must run before MDC to prevent [X] being parsed as MDC syntax
     .use(markdownItTaskListsMdc)
+    .use(markdownItEmoji)
     .use(pluginMdc)
 
   for (const plugin of options.plugins || []) {
