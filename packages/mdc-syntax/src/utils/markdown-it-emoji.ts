@@ -422,12 +422,12 @@ function emojiRule(state: StateInline, silent: boolean): boolean {
     // Only allow word characters, digits, underscores, hyphens, and plus
     // This matches the pattern of valid emoji names
     if (
-      (code >= 0x61 && code <= 0x7A) || // a-z
-      (code >= 0x41 && code <= 0x5A) || // A-Z
-      (code >= 0x30 && code <= 0x39) || // 0-9
-      code === 0x5F || // _
-      code === 0x2D || // -
-      code === 0x2B    // +
+      (code >= 0x61 && code <= 0x7A) // a-z
+      || (code >= 0x41 && code <= 0x5A) // A-Z
+      || (code >= 0x30 && code <= 0x39) // 0-9
+      || code === 0x5F // _
+      || code === 0x2D // -
+      || code === 0x2B // +
     ) {
       pos++
       continue
