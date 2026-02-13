@@ -1,0 +1,17 @@
+{
+  "name": "mdc-syntax-nuxt-ui",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "@nuxt/ui": "^4.4.0",
+    "mdc-syntax": "^1.0.0",
+    "nuxt": "^4.3.1",
+    "tailwindcss": "^4.1.18"
+  }
+}

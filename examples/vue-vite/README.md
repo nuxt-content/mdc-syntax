@@ -88,7 +88,7 @@ export default defineConfig({
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
-    "mdc-syntax": "workspace:*",
+    "mdc-syntax": "^1.0.0",
     "vue": "^3.5.27"
   },
   "devDependencies": {

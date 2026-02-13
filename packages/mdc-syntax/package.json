@@ -20,7 +20,8 @@
     "./vue/*": "./dist/vue/*.mjs",
     "./react": "./dist/react/index.mjs",
     "./react/*": "./dist/react/*.mjs",
-    "./stream": "./dist/stream.mjs"
+    "./stream": "./dist/stream.mjs",
+    "./nuxt": "./dist/nuxt/module.mjs"
   },
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
@@ -60,6 +61,7 @@
   },
   "devDependencies": {
     "@mdc-syntax/cjk": "workspace:*",
+    "@nuxt/kit": "^4.3.1",
     "github-slugger": "^2.0.0",
     "hast-util-to-string": "^3.0.1",
     "obuild": "^0.4.27",

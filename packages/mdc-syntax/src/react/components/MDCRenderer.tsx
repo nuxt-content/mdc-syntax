@@ -5,40 +5,6 @@ import { camelCase, pascalCase } from 'scule'
 import { findLastTextNodeAndAppendNode, getCaret } from '../../utils/caret'
 
 /**
- * Default HTML tag mappings for MDC elements
- */
-const defaultTagMap: Record<string, string> = {
-  p: 'p',
-  h1: 'h1',
-  h2: 'h2',
-  h3: 'h3',
-  h4: 'h4',
-  h5: 'h5',
-  h6: 'h6',
-  ul: 'ul',
-  ol: 'ol',
-  li: 'li',
-  a: 'a',
-  strong: 'strong',
-  em: 'em',
-  code: 'code',
-  pre: 'pre',
-  blockquote: 'blockquote',
-  hr: 'hr',
-  br: 'br',
-  img: 'img',
-  table: 'table',
-  thead: 'thead',
-  tbody: 'tbody',
-  tr: 'tr',
-  th: 'th',
-  td: 'td',
-  del: 'del',
-  div: 'div',
-  span: 'span',
-}
-
-/**
  * Helper to get tag from a MinimarkNode
  */
 function getTag(node: MinimarkNode): string | null {
@@ -125,22 +91,24 @@ function renderNode(
     const nodeProps = getProps(node)
     const children = getChildren(node)
 
-    // Check if there's a custom component for this tag (exact match or PascalCase)
-    let customComponent = components[tag] || components[pascalCase(tag)]
+    const pascalTag = pascalCase(tag)
+    const proseTag = `Prose${pascalTag}`
+    // Check if there's a custom component for this tag
+    let customComponent = components[proseTag] || components[tag]
 
     // If not in components map and manifest is provided, try dynamic resolution
-    if (!customComponent && componentsManifest && !defaultTagMap[tag]) {
+    if (!customComponent && componentsManifest) {
       const cacheKey = tag
       if (!asyncComponentCache.has(cacheKey)) {
-        asyncComponentCache.set(
-          cacheKey,
-          lazy(() => componentsManifest(tag)),
-        )
+        const resolved = componentsManifest(tag)
+        if (resolved) {
+          asyncComponentCache.set(cacheKey, lazy(() => resolved))
+        }
       }
       customComponent = asyncComponentCache.get(cacheKey)
     }
 
-    const Component = customComponent || defaultTagMap[tag] || tag
+    const Component = customComponent || tag
 
     // Prepare props
     const props: Record<string, any> = { ...nodeProps }

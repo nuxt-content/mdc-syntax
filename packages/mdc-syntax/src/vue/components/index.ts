@@ -13,7 +13,7 @@ import ProsePre from './prose/ProsePre.vue'
  */
 export const standardProseComponents = {
   // Headings
-  h1: defineComponent({
+  proseH1: defineComponent({
     name: 'ProseH1Standard',
     setup(props, { slots }) {
       return () => h('h1', {
@@ -22,7 +22,7 @@ export const standardProseComponents = {
       }, slots.default?.())
     },
   }),
-  h2: defineComponent({
+  proseH2: defineComponent({
     name: 'ProseH2Standard',
     setup(props, { slots }) {
       return () => h('h2', {
@@ -31,7 +31,7 @@ export const standardProseComponents = {
       }, slots.default?.())
     },
   }),
-  h3: defineComponent({
+  proseH3: defineComponent({
     name: 'ProseH3Standard',
     setup(props, { slots }) {
       return () => h('h3', {
@@ -40,7 +40,7 @@ export const standardProseComponents = {
       }, slots.default?.())
     },
   }),
-  h4: defineComponent({
+  proseH4: defineComponent({
     name: 'ProseH4Standard',
     setup(props, { slots }) {
       return () => h('h4', {
@@ -49,7 +49,7 @@ export const standardProseComponents = {
       }, slots.default?.())
     },
   }),
-  h5: defineComponent({
+  proseH5: defineComponent({
     name: 'ProseH5Standard',
     setup(props, { slots }) {
       return () => h('h5', {
@@ -58,7 +58,7 @@ export const standardProseComponents = {
       }, slots.default?.())
     },
   }),
-  h6: defineComponent({
+  proseH6: defineComponent({
     name: 'ProseH6Standard',
     setup(props, { slots }) {
       return () => h('h6', {
@@ -69,7 +69,7 @@ export const standardProseComponents = {
   }),
 
   // Text elements
-  p: defineComponent({
+  proseP: defineComponent({
     name: 'ProsePStandard',
     setup(props, { slots }) {
       return () => h('p', {
@@ -78,7 +78,7 @@ export const standardProseComponents = {
       }, slots.default?.())
     },
   }),
-  strong: defineComponent({
+  proseStrong: defineComponent({
     name: 'ProseStrongStandard',
     setup(props, { slots }) {
       return () => h('strong', {
@@ -87,7 +87,7 @@ export const standardProseComponents = {
       }, slots.default?.())
     },
   }),
-  em: defineComponent({
+  proseEm: defineComponent({
     name: 'ProseEmStandard',
     setup(props, { slots }) {
       return () => h('em', {
@@ -96,7 +96,7 @@ export const standardProseComponents = {
       }, slots.default?.())
     },
   }),
-  del: defineComponent({
+  proseDel: defineComponent({
     name: 'ProseDelStandard',
     setup(props, { slots }) {
       return () => h('del', {
@@ -107,7 +107,7 @@ export const standardProseComponents = {
   }),
 
   // Links
-  a: defineComponent({
+  proseA: defineComponent({
     name: 'ProseAStandard',
     setup(props, { slots }) {
       return () => h('a', {
@@ -118,7 +118,7 @@ export const standardProseComponents = {
   }),
 
   // Code
-  code: defineComponent({
+  proseCode: defineComponent({
     name: 'ProseCodeStandard',
     setup(props, { slots }) {
       return () => h('code', {
@@ -130,7 +130,7 @@ export const standardProseComponents = {
   pre: ProsePre,
 
   // Lists
-  ul: defineComponent({
+  proseUl: defineComponent({
     name: 'ProseUlStandard',
     setup(props, { slots }) {
       return () => h('ul', {
@@ -139,7 +139,7 @@ export const standardProseComponents = {
       }, slots.default?.())
     },
   }),
-  ol: defineComponent({
+  proseOl: defineComponent({
     name: 'ProseOlStandard',
     setup(props, { slots }) {
       return () => h('ol', {
@@ -148,7 +148,7 @@ export const standardProseComponents = {
       }, slots.default?.())
     },
   }),
-  li: defineComponent({
+  proseLi: defineComponent({
     name: 'ProseLiStandard',
     setup(props, { slots }) {
       return () => h('li', {
@@ -159,7 +159,7 @@ export const standardProseComponents = {
   }),
 
   // Blockquote
-  blockquote: defineComponent({
+  proseBlockquote: defineComponent({
     name: 'ProseBlockquoteStandard',
     setup(props, { slots }) {
       return () => h('blockquote', {
@@ -170,7 +170,7 @@ export const standardProseComponents = {
   }),
 
   // Table
-  table: defineComponent({
+  proseTable: defineComponent({
     name: 'ProseTableStandard',
     setup(props, { slots }) {
       return () => h('table', {
@@ -179,7 +179,7 @@ export const standardProseComponents = {
       }, slots.default?.())
     },
   }),
-  thead: defineComponent({
+  proseThead: defineComponent({
     name: 'ProseTheadStandard',
     setup(props, { slots }) {
       return () => h('thead', {
@@ -188,7 +188,7 @@ export const standardProseComponents = {
       }, slots.default?.())
     },
   }),
-  tbody: defineComponent({
+  proseTbody: defineComponent({
     name: 'ProseTbodyStandard',
     setup(props, { slots }) {
       return () => h('tbody', {
@@ -197,7 +197,7 @@ export const standardProseComponents = {
       }, slots.default?.())
     },
   }),
-  tr: defineComponent({
+  proseTr: defineComponent({
     name: 'ProseTrStandard',
     setup(props, { slots }) {
       return () => h('tr', {
@@ -206,7 +206,7 @@ export const standardProseComponents = {
       }, slots.default?.())
     },
   }),
-  th: defineComponent({
+  proseTh: defineComponent({
     name: 'ProseThStandard',
     setup(props, { slots }) {
       return () => h('th', {
@@ -215,7 +215,7 @@ export const standardProseComponents = {
       }, slots.default?.())
     },
   }),
-  td: defineComponent({
+  proseTd: defineComponent({
     name: 'ProseTdStandard',
     setup(props, { slots }) {
       return () => h('td', {
@@ -226,7 +226,7 @@ export const standardProseComponents = {
   }),
 
   // Other elements
-  hr: defineComponent({
+  proseHr: defineComponent({
     name: 'ProseHrStandard',
     setup(props) {
       return () => h('hr', {
@@ -235,7 +235,7 @@ export const standardProseComponents = {
       })
     },
   }),
-  img: defineComponent({
+  proseImg: defineComponent({
     name: 'ProseImgStandard',
     setup(props) {
       return () => h('img', {

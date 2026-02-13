@@ -7,6 +7,12 @@ export type ParsePlugin = {
   markdownItPlugins: MarkdownItPlugin[]
 }
 
+export type ComponentManifest = (name: string) => Promise<unknown> | null
+export interface MDCProvider {
+  components: Record<string, any>
+  componentManifest: ComponentManifest
+}
+
 export interface ShikiOptions {
   /**
    * Languages to preload. If not specified, languages will be loaded on demand.
