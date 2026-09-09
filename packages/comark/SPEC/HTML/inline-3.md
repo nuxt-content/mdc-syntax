@@ -1,7 +1,7 @@
 ## Input
 
 ```md
-<span>Hello **World**</span>
+<h1>Hello **World**</h1>
 ```
 
 ## AST
@@ -12,11 +12,11 @@
   "meta": {},
   "nodes": [
     [
-      "span",
+      "h1",
       {
         "$": {
           "html": 1,
-          "block": 0
+          "block": 1
         }
       },
       "Hello ",
@@ -33,11 +33,11 @@
 ## HTML
 
 ```html
-<span>Hello <strong>World</strong></span>
+<h1>Hello <strong>World</strong></h1>
 ```
 
 ## Markdown
 
 ```md
-<span>Hello **World**</span>
+<h1>Hello **World**</h1>
 ```

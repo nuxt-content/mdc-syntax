@@ -1,7 +1,11 @@
 ## Input
 
 ```md
-<p><img src="/foo.png" alt="x"></p>
+<details>
+<summary>Hello</summary>
+
+Explain
+</details>
 ```
 
 ## AST
@@ -12,7 +16,7 @@
   "meta": {},
   "nodes": [
     [
-      "p",
+      "details",
       {
         "$": {
           "html": 1,
@@ -20,15 +24,19 @@
         }
       },
       [
-        "img",
+        "summary",
         {
           "$": {
             "html": 1,
             "block": 0
-          },
-          "src": "/foo.png",
-          "alt": "x"
-        }
+          }
+        },
+        "Hello"
+      ],
+      [
+        "p",
+        {},
+        "Explain"
       ]
     ]
   ]
@@ -38,11 +46,17 @@
 ## HTML
 
 ```html
-<p><img src="/foo.png" alt="x"></p>
+<details>
+  <summary>Hello</summary>
+  <p>Explain</p>
+</details>
 ```
 
 ## Markdown
 
 ```md
-<p><img src="/foo.png" alt="x"></p>
+<details>
+<summary>Hello</summary>
+Explain
+</details>
 ```

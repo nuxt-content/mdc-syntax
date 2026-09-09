@@ -26,7 +26,7 @@ name: Ada
     [
       "h2",
       {
-        "id": "hello-binding"
+        "id": "hello"
       },
       "Hello ",
       [
@@ -43,7 +43,7 @@ name: Ada
 ## HTML
 
 ```html
-<h2 id="hello-binding">
+<h2 id="hello">
   Hello Ada
 </h2>
 ```

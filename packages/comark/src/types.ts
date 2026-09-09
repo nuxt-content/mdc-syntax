@@ -1,5 +1,6 @@
 import type { DumpOptions } from 'js-yaml'
 import type MarkdownExit from 'markdown-exit'
+import type { Token } from 'markdown-exit'
 import type MarkdownIt from 'markdown-it'
 
 // #region Utility Types
@@ -282,18 +283,22 @@ export type MarkdownExitPlugin = (md: MarkdownExit) => void
 export type MarkdownItPlugin = (md: MarkdownIt) => void
 export type MarkdownItPluginWithOptions<T> = (md: MarkdownIt, options: T) => void
 
-export type ComarkParsePreState = {
+export interface ComarkParsePreState {
   markdown: string
   options: ParserOptions
 
   [key: string]: any
 }
 
-export type ComarkParsePostState<TMeta = Record<string, any>, TFrontmatter = Record<string, any>> = {
-  markdown: string
+export interface ComarkParseTokensState extends ComarkParsePreState {
+  tokens: Token[]
+}
+
+export interface ComarkParsePostState<
+  TMeta = Record<string, any>,
+  TFrontmatter = Record<string, any>,
+> extends ComarkParseTokensState {
   tree: MarkdownDocument<TMeta, TFrontmatter>
-  options: ParserOptions
-  tokens: unknown[]
 
   [key: string]: any
 }
@@ -361,6 +366,7 @@ export interface ComarkTracer {
 export type ComarkPlugin<TMeta = {}, TFrontmatter = {}> = {
   name: string
   markdownItPlugins?: MarkdownItPlugin[]
+  markdownItPost?: (state: ComarkParseTokensState) => void
   pre?: (state: ComarkParsePreState) => Promise<void> | void
   post?: (state: ComarkParsePostState<Writable<TMeta>, Writable<TFrontmatter>>) => Promise<void> | void
   /** Phantom — used for type inference only. Never set at runtime. */

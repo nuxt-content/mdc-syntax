@@ -83,7 +83,7 @@ full-width: true
             "svg",
             {
               "$": {
-                "block": 0,
+                "block": 1,
                 "html": 1
               },
               "width": "10"
@@ -99,7 +99,7 @@ full-width: true
             "svg",
             {
               "$": {
-                "block": 0,
+                "block": 1,
                 "html": 1
               },
               "width": "10"
@@ -115,7 +115,7 @@ full-width: true
             "svg",
             {
               "$": {
-                "block": 0,
+                "block": 1,
                 "html": 1
               },
               "width": "10"
@@ -131,7 +131,7 @@ full-width: true
             "svg",
             {
               "$": {
-                "block": 0,
+                "block": 1,
                 "html": 1
               },
               "width": "10"
@@ -147,7 +147,7 @@ full-width: true
             "svg",
             {
               "$": {
-                "block": 0,
+                "block": 1,
                 "html": 1
               },
               "width": "10"

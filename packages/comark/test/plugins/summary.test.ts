@@ -13,7 +13,6 @@ After the fold.
 describe('summary plugin', () => {
   it('writes the nodes before the delimiter to tree.meta.summary', async () => {
     const tree = await parseMarkdown(CONTENT, { plugins: [summary()] })
-
     expect(tree.meta.summary).toEqual([['p', {}, 'Intro paragraph.']])
   })
 

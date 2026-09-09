@@ -25,7 +25,7 @@ describe('default plugin options', () => {
 
     it('parses HTML by default', async () => {
       const tree = await parseMarkdown('<strong class="bold">Hello</strong>')
-      expect(tree.nodes).toEqual([['p', {}, ['strong', { class: 'bold', $: { html: 1, block: 0 } }, 'Hello']]])
+      expect(tree.nodes).toEqual([['strong', { class: 'bold', $: { html: 1, block: 0 } }, 'Hello']])
     })
 
     it('parses frontmatter by default', async () => {
@@ -64,7 +64,7 @@ describe('default plugin options', () => {
         registerDefaultPlugins: false,
         plugins: [html()],
       })
-      expect(tree.nodes).toEqual([['p', {}, ['em', { $: { html: 1, block: 0 } }, 'hi']]])
+      expect(tree.nodes).toEqual([['em', { $: { html: 1, block: 0 } }, 'hi']])
     })
 
     it('treats attribute braces as plain text when registerDefaultPlugins is false', async () => {

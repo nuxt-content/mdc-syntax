@@ -17,6 +17,18 @@ describe('HTML attribute escaping', () => {
     expect(html).not.toContain('title="a" onmouseover=alert(1)"')
   })
 
+  it('decodes &quot; inside quoted HTML attribute values', async () => {
+    const tree = await parseMarkdown('<span title="A &quot;quote&quot;">hi</span>')
+    const p = tree.nodes[0] as [string, Record<string, unknown>, ...Node[]]
+    const span = (Array.isArray(p[2]) ? p[2] : p) as [string, Record<string, unknown>, ...Node[]]
+    expect(span[0]).toBe('span')
+    expect(span[1].title).toBe('A "quote"')
+
+    const html = await renderHtml('<span title="A &quot;quote&quot;">hi</span>')
+    expect(html).toContain('title="A &quot;quote&quot;"')
+    expect(html).not.toContain('title="A "quote""')
+  })
+
   it('escapes quotes in component attribute props', async () => {
     const html = await renderHtml(`:span[hi]{title='a" onmouseover=alert(1) x="b'}`)
     expect(html).toContain('title="a&quot; onmouseover=alert(1) x=&quot;b"')
@@ -47,6 +59,16 @@ describe('HTML attribute escaping', () => {
   it('escapes ampersands and angle brackets in attribute values', async () => {
     const html = await renderHtml(`<span title="a&b<c>d">hi</span>`)
     expect(html).toContain('title="a&amp;b&lt;c&gt;d"')
+  })
+
+  it('escapes bare ampersands in URL attribute values', async () => {
+    // Query-string `&` must become `&amp;` in HTML attrs (HTML5).
+    // Re-parse still yields bare `&` because htmlparser2 decodes entities.
+    const html = await renderHtml(`<img src="https://x.com/?a=1&b=2" alt="x">`)
+    expect(html).toContain('src="https://x.com/?a=1&amp;b=2"')
+    const tree = await parseMarkdown(html)
+    const img = tree.nodes[0] as [string, Record<string, unknown>]
+    expect(img[1].src).toBe('https://x.com/?a=1&b=2')
   })
 
   it('escapes object attribute values as JSON with entities', async () => {

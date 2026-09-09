@@ -11,20 +11,19 @@ import type {
   MarkdownDocument,
   Node,
 } from './types.ts'
-import MarkdownExit from 'markdown-exit'
+import MarkdownExit, { type Token } from 'markdown-exit'
 import components from './plugins/components.ts'
 import attributes from './plugins/attributes.ts'
 import taskList from './plugins/task-list.ts'
 import alert from './plugins/alert.ts'
 import html from './plugins/html.ts'
 import frontmatterPlugin from './plugins/frontmatter.ts'
-import { applyAutoUnwrap } from './internal/parse/auto-unwrap.ts'
+import { applyAutoUnwrap, extractReusableNodes } from './internal/parse/utils.ts'
 import { applyUnwrap, resolveUnwrapTags } from './internal/parse/unwrap.ts'
-import { marmdownItTokensToMarkdownDocument } from './internal/parse/token-processor.ts'
 import { autoCloseMarkdown } from './internal/parse/auto-close/index.ts'
-import { extractReusableNodes } from './internal/parse/incremental.ts'
 import { createSerializedTask, dedupePlugins } from './utils/helpers.ts'
 import { noopTracer, withSpan } from './utils/trace.ts'
+import { tokenListToTree } from './internal/parse/tree.ts'
 
 // Re-export frontmatter utilities
 export { parseFrontmatter } from './internal/frontmatter.ts'
@@ -113,7 +112,7 @@ export function createMarkdownParser<const TPlugins extends readonly ComarkPlugi
     return await withSpan(tracer, 'comark:parse', async () => {
       const state = {
         options,
-        tokens: [] as unknown[],
+        tokens: [] as Token[],
         markdown,
         tree: null as MarkdownDocument | null,
         parsedLines: 0,
@@ -169,9 +168,15 @@ export function createMarkdownParser<const TPlugins extends readonly ComarkPlugi
         throw e
       }
 
-      // Convert tokens to Comark structure
+      for (const plugin of plugins) {
+        if (!plugin.markdownItPost) continue
+        withSpan(tracer, `comark:markdownItPost:${plugin.name}`, () =>
+          plugin.markdownItPost!(state as ComarkParsePostState)
+        )
+      }
+
       const nodesSpan = tracer.startSpan('comark:nodes')
-      let nodes = marmdownItTokensToMarkdownDocument(state.tokens, {
+      let nodes = tokenListToTree(state.tokens, {
         startLine: state.parsedLines,
         preservePositions: opts.streaming ?? false,
         headingIds: options.headingIds ?? true,

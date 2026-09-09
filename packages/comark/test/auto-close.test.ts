@@ -32,7 +32,11 @@ $$formula → $$formula
 _ not valid → _ not valid
 __ not valid → __ not valid
 ~ not valid → ~ not valid
-~~ not valid → ~~ not valid`
+~~ not valid → ~~ not valid
+The cost is $ → The cost is $
+~Hello → ~Hello
+~~Hello~~ → ~~Hello~~
+~~ Hello → ~~ Hello`
 
 const multilines = `
 | Month    | Savings

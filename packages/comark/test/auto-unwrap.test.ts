@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { applyAutoUnwrap } from '../src/internal/parse/auto-unwrap'
+import { applyAutoUnwrap } from '../src/internal/parse/utils'
+import { TREE_WALK_MAX_DEPTH } from 'comark/utils'
 import type { Node } from 'comark'
 
 describe('applyAutoUnwrap', () => {
@@ -83,5 +84,62 @@ describe('applyAutoUnwrap', () => {
     const result = applyAutoUnwrap(node)
     // Should unwrap the paragraph and filter out whitespace
     expect(result).toEqual(['warning', {}, 'Warning text'])
+  })
+
+  it('should not unwrap a markdown paragraph next to HTML siblings', () => {
+    const node: Node = [
+      'details',
+      { $: { html: 1, block: 1 } },
+      ['summary', { $: { html: 1, block: 0 } }, 'Top'],
+      ['p', {}, 'Body'],
+    ]
+
+    const result = applyAutoUnwrap(node)
+    // Paragraph is not the sole child — keep the wrapper.
+    expect(result).toEqual([
+      'details',
+      { $: { html: 1, block: 1 } },
+      ['summary', { $: { html: 1, block: 0 } }, 'Top'],
+      ['p', {}, 'Body'],
+    ])
+  })
+
+  it('should still unwrap a sole markdown paragraph under an HTML container', () => {
+    const node: Node = ['details', { $: { html: 1, block: 1 } }, ['p', {}, 'Only body']]
+
+    const result = applyAutoUnwrap(node)
+    expect(result).toEqual(['details', { $: { html: 1, block: 1 } }, 'Only body'])
+  })
+
+  it('should unwrap a nested paragraph within the depth cap', () => {
+    // TREE_WALK_MAX_DEPTH wrappers (d0…dN-1) + paragraph — last wrapper is still processed.
+    let node: Node = ['p', {}, 'Deep']
+    for (let i = TREE_WALK_MAX_DEPTH - 1; i >= 0; i--) {
+      node = [`d${i}`, {}, node]
+    }
+
+    const result = applyAutoUnwrap(node)
+    let cursor = result as Node[]
+    for (let i = 0; i < TREE_WALK_MAX_DEPTH; i++) {
+      expect(cursor[0]).toBe(`d${i}`)
+      cursor = cursor[2] as Node[]
+    }
+    expect(cursor).toBe('Deep')
+  })
+
+  it('should not walk past TREE_WALK_MAX_DEPTH element levels', () => {
+    // TREE_WALK_MAX_DEPTH + 1 wrappers (d0…dN) + paragraph — last wrapper is past the cap.
+    let node: Node = ['p', {}, 'Too deep']
+    for (let i = TREE_WALK_MAX_DEPTH; i >= 0; i--) {
+      node = [`d${i}`, {}, node]
+    }
+
+    const result = applyAutoUnwrap(node)
+    let cursor = result as Node[]
+    for (let i = 0; i <= TREE_WALK_MAX_DEPTH; i++) {
+      expect(cursor[0]).toBe(`d${i}`)
+      cursor = cursor[2] as Node[]
+    }
+    expect(cursor).toEqual(['p', {}, 'Too deep'])
   })
 })

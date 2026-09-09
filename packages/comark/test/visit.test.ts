@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { visit } from 'comark/utils'
+import { TREE_WALK_MAX_DEPTH, visit } from 'comark/utils'
 import type { MarkdownDocument, Node } from 'comark'
 
 describe('visit', () => {
@@ -408,5 +408,54 @@ describe('visit', () => {
     expect(tree.nodes[0]).toEqual(['h1', {}, 'Title'])
     expect(tree.nodes[1]).toEqual(['section', {}, 'Replaced'])
     expect(tree.nodes[2]).toEqual(['span', {}, 'Keep'])
+  })
+
+  it('should visit nodes within the depth cap', () => {
+    // TREE_WALK_MAX_DEPTH - 1 wrappers + text — text is at depth N-1 and still visited.
+    let node: Node = 'Deep'
+    for (let i = TREE_WALK_MAX_DEPTH - 2; i >= 0; i--) {
+      node = [`d${i}`, {}, node]
+    }
+
+    const tree: MarkdownDocument = { nodes: [node], frontmatter: {}, meta: {} }
+    const visited: string[] = []
+    visit(
+      tree,
+      () => true,
+      (n) => {
+        visited.push(typeof n === 'string' ? n : String(n[0]))
+      }
+    )
+
+    const expected = Array.from({ length: TREE_WALK_MAX_DEPTH - 1 }, (_, i) => `d${i}`)
+    expected.push('Deep')
+    expect(visited).toEqual(expected)
+  })
+
+  it('should not walk past TREE_WALK_MAX_DEPTH element levels', () => {
+    // TREE_WALK_MAX_DEPTH + 1 wrappers + text — last wrapper and its children are past the cap.
+    let node: Node = 'Too deep'
+    for (let i = TREE_WALK_MAX_DEPTH; i >= 0; i--) {
+      node = [`d${i}`, {}, node]
+    }
+
+    const tree: MarkdownDocument = { nodes: [node], frontmatter: {}, meta: {} }
+    const visited: string[] = []
+    visit(
+      tree,
+      () => true,
+      (n) => {
+        visited.push(typeof n === 'string' ? n : String(n[0]))
+      }
+    )
+
+    expect(visited).toEqual(Array.from({ length: TREE_WALK_MAX_DEPTH }, (_, i) => `d${i}`))
+
+    let cursor = tree.nodes[0] as Node[]
+    for (let i = 0; i <= TREE_WALK_MAX_DEPTH; i++) {
+      expect(cursor[0]).toBe(`d${i}`)
+      cursor = cursor[2] as Node[]
+    }
+    expect(cursor).toBe('Too deep')
   })
 })

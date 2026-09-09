@@ -1,7 +1,8 @@
 ## Input
 
 ```md
-<span>Hello **World**</span>
+<ai-thinking>
+**bold**
 ```
 
 ## AST
@@ -12,18 +13,17 @@
   "meta": {},
   "nodes": [
     [
-      "span",
+      "ai-thinking",
       {
         "$": {
           "html": 1,
-          "block": 0
+          "block": 1
         }
       },
-      "Hello ",
       [
         "strong",
         {},
-        "World"
+        "bold"
       ]
     ]
   ]
@@ -33,11 +33,15 @@
 ## HTML
 
 ```html
-<span>Hello <strong>World</strong></span>
+<ai-thinking>
+  <strong>bold</strong>
+</ai-thinking>
 ```
 
 ## Markdown
 
 ```md
-<span>Hello **World**</span>
+<ai-thinking>
+**bold**
+</ai-thinking>
 ```

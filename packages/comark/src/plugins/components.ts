@@ -61,7 +61,7 @@ const markdownItComarkBlock: PluginSimple = (md) => {
 
       if (!silent) {
         if (content !== undefined) {
-          const tokenOpen = state.push('mdc_block_shorthand', name, 1)
+          const tokenOpen = state.push('mdc_block_shorthand_open', name, 1)
           props?.forEach(([key, value]) => {
             if (key === 'class') tokenOpen.attrJoin(key, value)
             else tokenOpen.attrSet(key, value)
@@ -72,7 +72,7 @@ const markdownItComarkBlock: PluginSimple = (md) => {
           inline.content = content
           inline.children = []
 
-          const tokenClose = state.push('mdc_block_shorthand', name, -1)
+          const tokenClose = state.push('mdc_block_shorthand_close', name, -1)
           tokenClose.map = [startLine, startLine + 1]
         } else {
           const token = state.push('mdc_block_shorthand', name, 0)
@@ -366,8 +366,8 @@ const markdownItComarkBlock: PluginSimple = (md) => {
     // Restore lineMax after tokenizing so it doesn't leak a narrower bound to
     // whatever comes after this slot (see `comark_block`'s save/restore above).
     const oldLineMax = state.lineMax
-    const slot = state.push('mdc_block_slot', 'template', 1)
-    slot.attrSet(`#${name}`, '')
+    const slot = state.push('mdc_block_slot_open', 'template', 1)
+    slot.attrSet('name', `${name}`)
     props?.forEach(([key, value]) => {
       if (key === 'class') slot.attrJoin(key, value)
       else slot.attrSet(key, value)
@@ -378,7 +378,7 @@ const markdownItComarkBlock: PluginSimple = (md) => {
 
     state.md.block.tokenize(state, startLine + 1, lineEnd)
 
-    state.push('mdc_block_slot', 'template', -1)
+    state.push('mdc_block_slot_close', 'template', -1)
 
     state.line = lineEnd
     state.lineMax = oldLineMax
@@ -431,7 +431,7 @@ const markdownItInlineComponent: PluginSimple = (md) => {
     if (silent) return true
 
     if (contentStart !== -1) {
-      state.push('mdc_inline_component', name, 1)
+      state.push('mdc_inline_component_open', name, 1)
 
       const oldPos = state.pos
       const oldPosMax = state.posMax
@@ -441,7 +441,7 @@ const markdownItInlineComponent: PluginSimple = (md) => {
       state.pos = oldPos
       state.posMax = oldPosMax
 
-      state.push('mdc_inline_component', name, -1)
+      state.push('mdc_inline_component_close', name, -1)
     } else {
       state.push('mdc_inline_component', name, 0)
     }
@@ -472,7 +472,7 @@ const markdownItInlineSpan: PluginSimple = (md) => {
     // Returning `false` lets `parseLinkLabel`'s own depth tracking consume nested brackets and the outer link parse
     if (silent) return false
 
-    state.push('mdc_inline_span', 'span', 1)
+    state.push('mdc_inline_span_open', 'span', 1)
 
     const oldPos = state.pos
     const oldPosMax = state.posMax
@@ -482,7 +482,7 @@ const markdownItInlineSpan: PluginSimple = (md) => {
     state.pos = oldPos
     state.posMax = oldPosMax
 
-    state.push('mdc_inline_span', 'span', -1)
+    state.push('mdc_inline_span_close', 'span', -1)
 
     state.pos = index + 1
 
