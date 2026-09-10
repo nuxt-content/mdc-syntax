@@ -6,7 +6,7 @@ A guide for using Comark in AI agent and LLM-powered applications where markdown
 
 LLMs stream markdown token-by-token. Standard markdown parsers expect complete input. They fail or produce broken output on partial streams. Comark was built to handle exactly this:
 
-- **`autoClose`** (default: `true`): incomplete syntax like `**bold text` is automatically closed on every parse, so partial tokens always render correctly
+- **`autoClose`** (default: `'streaming'`): incomplete syntax like `**bold text` is closed when you parse with `{ streaming: true }`, so partial tokens always render correctly. A plain parse leaves it as written; set `autoClose: true` to close on every parse
 - **Streaming mode**: re-renders efficiently as content arrives
 - **Caret indicator**: shows a live cursor during generation
 - **ANSI rendering**: styled terminal output for CLI agents
@@ -297,7 +297,7 @@ export const ChatMarkdown = defineMarkdownComponent({
     shiki({ themes: { light: githubDark, dark: githubDark } }),
   ],
   components: { Math, alert: Alert },
-  autoClose: true,
+  autoClose: 'streaming',
 })
 ```
 

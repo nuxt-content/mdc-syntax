@@ -101,7 +101,9 @@ describe('default plugin options', () => {
     })
 
     it('still auto-closes markdown markers when disabled', async () => {
-      const tree = await parseMarkdown('**bold', { registerDefaultPlugins: false })
+      // The assertion is that `registerDefaultPlugins: false` does not turn healing
+      // off, so ask for healing explicitly: the default only heals while streaming.
+      const tree = await parseMarkdown('**bold', { registerDefaultPlugins: false, autoClose: true })
       expect(tree.nodes).toEqual([['p', {}, ['strong', {}, 'bold']]])
     })
   })

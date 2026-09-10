@@ -1,5 +1,6 @@
 import type {
   ComarkParseFn,
+  ComarkParseFnOptions,
   ComarkParsePostState,
   ComarkPlugin,
   MarkdownExitPlugin,
@@ -63,7 +64,7 @@ export { defineComarkPlugin } from './utils/helpers.ts'
 export function createMarkdownParser<const TPlugins extends readonly ComarkPlugin<any, any>[] = []>(
   options: ParserOptions<TPlugins> = {} as ParserOptions<TPlugins>
 ): ComarkParseFn<ResolvedMeta<MergePluginMeta<TPlugins>>, ResolvedFrontmatter<MergePluginFrontmatter<TPlugins>>> {
-  const { autoUnwrap = true, autoClose = true, tracer = noopTracer } = options
+  const { autoUnwrap = true, autoClose = 'streaming', tracer = noopTracer } = options
   // Tag set to strip from the top level of the tree (MDC `unwrap`). Resolved once.
   const unwrapTags = resolveUnwrapTags(options.unwrap)
 
@@ -138,9 +139,13 @@ export function createMarkdownParser<const TPlugins extends readonly ComarkPlugi
         state.reusableNodes = reusedNodes
       }
 
-      if (typeof autoClose === 'function') {
-        state.markdown = withSpan(tracer, 'comark:autoclose', () => autoClose(state.markdown))
-      } else if (autoClose) {
+      // `autoClose: 'streaming'` (the default) heals only when the caller says the
+      // input may be incomplete. `true` heals every parse, `false` never does.
+      const healing = autoClose === 'streaming' ? opts.streaming === true : autoClose
+
+      if (typeof healing === 'function') {
+        state.markdown = withSpan(tracer, 'comark:autoclose', () => healing(state.markdown))
+      } else if (healing) {
         state.markdown = withSpan(tracer, 'comark:autoclose', () =>
           autoCloseMarkdown(state.markdown, {
             frontmatter: hasPlugin('frontmatter') && opts.streaming,
@@ -255,17 +260,21 @@ export function createMarkdownParser<const TPlugins extends readonly ComarkPlugi
  *
  * // Disable auto-unwrap
  * const tree2 = await parseMarkdown(content, { autoUnwrap: false })
+ *
+ * // Parsing a chunk of a stream
+ * const tree3 = await parseMarkdown(chunk, {}, { streaming: true })
  * ```
  */
 export async function parseMarkdown<const TPlugins extends readonly ComarkPlugin<any, any>[] = []>(
   markdown: string,
-  options: ParserOptions<TPlugins> = {} as ParserOptions<TPlugins>
+  options: ParserOptions<TPlugins> = {} as ParserOptions<TPlugins>,
+  parseOptions: ComarkParseFnOptions = {}
 ): Promise<
   MarkdownDocument<ResolvedMeta<MergePluginMeta<TPlugins>>, ResolvedFrontmatter<MergePluginFrontmatter<TPlugins>>>
 > {
   const parser = createMarkdownParser(options)
 
-  return await parser(markdown)
+  return await parser(markdown, parseOptions)
 }
 
 /**

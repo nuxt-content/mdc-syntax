@@ -14,6 +14,10 @@ options:
 - math: auto-close inline `$…$` and block `$$…$$` (default: `false`)
 - dropTrailingOpeners: drop a trailing opener after whitespace at EOF (`hello *` → `hello`) so half-typed markers do not flash (default: `false`; enabled when parsing with `streaming: true`)
 
+The parse-level `autoClose` option defaults to `'streaming'`, so `parseMarkdown()` and
+`createMarkdownParser()` heal only a parse called with `{ streaming: true }`. `autoClose: true`
+heals every parse. Calling `autoCloseMarkdown` directly always heals.
+
 
 ---
 
@@ -182,6 +186,52 @@ Leaves finished inline code alone:
 - Text with `inline code`
 + Text with `inline code`
 ```
+
+### Delimiter runs
+
+A span closes on a backtick run of the same length as its opener. A shorter or longer
+run inside the span is literal content, so a finished multi-backtick span is left alone
+even when text follows it.
+
+```diff
+- a ``x`` b
++ a ``x`` b
+```
+
+```diff
+- `` a _b ``
++ `` a _b ``
+```
+
+```diff
+- ``{ modelValue: _Number<T> }`` and more
++ ``{ modelValue: _Number<T> }`` and more
+```
+
+```diff
+- ``Use `code` in your Markdown file.``
++ ``Use `code` in your Markdown file.``
+```
+
+An unclosed run is closed with a run of its own length, and markers opened inside it
+still close inside:
+
+```diff
+- use ``a _b`` then _c
++ use ``a _b`` then _c_
+```
+
+```diff
+- `a`` b
++ `a`` b`
+```
+
+```diff
+- ``a` b
++ ``a` b``
+```
+
+A run of three or more mid-line is fence-shaped, not an inline span, and stays literal.
 
 ---
 
@@ -724,6 +774,46 @@ Space-flanked `*` is treated as multiply, not italic:
 ```diff
 - 5 * 0 and *italic
 + 5 * 0 and *italic*
+```
+
+---
+
+## Multiple openers on one line
+
+Two closers for the same marker emitted back-to-back would merge into a different
+marker, so each run of same-marker closers collapses to one. `a _b and _c` used to
+heal to `a _b and _c__`, which nests an em inside an em.
+
+```diff
+- a _b and _c
++ a _b and _c_
+```
+
+```diff
+- a __b and __c
++ a __b and __c__
+```
+
+```diff
+- a ~~b and ~~c
++ a ~~b and ~~c~~
+```
+
+```diff
+- *a *b *c
++ *a *b *c*
+```
+
+Markers of different families still nest, so non-adjacent repeats are left alone:
+
+```diff
+- _a **b _c
++ _a **b _c_**_
+```
+
+```diff
+- a _b and __c
++ a _b and __c___
 ```
 
 ---

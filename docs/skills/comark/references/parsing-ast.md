@@ -53,7 +53,7 @@ interface MarkdownDocument {
 ```typescript
 interface ParserOptions {
   autoUnwrap?: boolean      // Remove unnecessary <p> wrappers (default: true)
-  autoClose?: boolean       // Auto-close unclosed syntax (default: true)
+  autoClose?: boolean | 'streaming' | ((markdown: string) => string)  // Auto-close unclosed syntax (default: 'streaming')
   plugins?: ComarkPlugin[]  // Enable plugins (e.g., highlight, emoji, toc)
 }
 ```

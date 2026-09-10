@@ -61,7 +61,7 @@ The migration has two parts: **Core Package** (programmatic API) and **Nuxt Modu
 {
   plugins: ComarkPlugin[],   // ordered array, not a record
   autoUnwrap: true,          // removes <p> from single-paragraph containers
-  autoClose: true,           // completes incomplete syntax (useful for streaming)
+  autoClose: 'streaming',    // completes incomplete syntax while streaming
   // HTML, components, attributes, alerts, task-list, frontmatter are on by default
 }
 ```

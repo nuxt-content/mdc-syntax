@@ -324,6 +324,11 @@ function healInline(text: string, opts: HealOpts): string {
 
   let fence = false
   let inCode = false
+  // Backtick count of the open code span, and the index in `out` where its
+  // opening run starts. A code span cannot nest, so one pair of scalars is
+  // enough; `out` is append-only, so the index stays valid in the joined result.
+  let codeRun = 0
+  let codeOpenOut = -1
   let inMath = false
   let inBlockMath = false
   let inLatexI = false
@@ -460,11 +465,24 @@ function healInline(text: string, opts: HealOpts): string {
 
     // Regions that protect markers
     if (inCode) {
-      out.push(ch)
-      if (ch === '`' && next !== '`' && prev !== '`') {
-        inCode = false
-        if (stack[stack.length - 1] === '`') stack.pop()
+      if (ch === '`') {
+        // A code span closes on a backtick run of the same length as its opener.
+        // A shorter or longer run is literal content (CommonMark), which is what
+        // keeps ``Use `code` in your file.`` intact.
+        let end = i
+        while (end + 1 < len && text[end + 1] === '`') end++
+        const run = end - i + 1
+        for (let k = i; k <= end; k++) out.push('`')
+        if (run === codeRun) {
+          inCode = false
+          codeRun = 0
+          codeOpenOut = -1
+          if (stack[stack.length - 1] === '`') stack.pop()
+        }
+        i = end
+        continue
       }
+      out.push(ch)
       continue
     }
     if (inBlockMath) {
@@ -551,15 +569,22 @@ function healInline(text: string, opts: HealOpts): string {
 
     // Code
     if (ch === '`') {
-      if (next === '`' && text[i + 2] === '`') {
-        // triple on non-line-start — copy
-        out.push('`', '`', '`')
-        i += 2
+      let end = i
+      while (end + 1 < len && text[end + 1] === '`') end++
+      const run = end - i + 1
+      if (run >= 3) {
+        // A run of three or more mid-line is fence-shaped, not an inline span.
+        // Copy it verbatim and leave it to the fence handling above.
+        for (let k = i; k <= end; k++) out.push('`')
+        i = end
         continue
       }
-      out.push(ch)
+      codeOpenOut = out.length
+      for (let k = i; k <= end; k++) out.push('`')
       inCode = true
+      codeRun = run
       stack.push('`')
+      i = end
       continue
     }
 
@@ -760,8 +785,7 @@ function healInline(text: string, opts: HealOpts): string {
   // SPEC: `**bold with `code` → `**bold with `code**``
   // Markers that opened *before* the code span must close inside it.
   if (inCode) {
-    const lastBq = result.lastIndexOf('`')
-    const afterBq = lastBq >= 0 ? result.slice(lastBq + 1) : ''
+    const afterBq = codeOpenOut >= 0 ? result.slice(codeOpenOut + codeRun) : ''
     if (afterBq.length > 0) {
       // Markers still on stack before the open ` need closing inside the span.
       // Open order is outer→inner left-to-right; close reverse order after content.
@@ -780,7 +804,7 @@ function healInline(text: string, opts: HealOpts): string {
         const m = stack[si]
         if (m === '**' || m === '*' || m === '__' || m === '_' || m === '~~' || m === '***') inner += m
       }
-      return result + inner + '`'
+      return result + inner + '`'.repeat(codeRun)
     }
     return result
   }
@@ -919,6 +943,14 @@ function closeOpenStack(
         }
       }
     }
+  }
+
+  // Two same-token closers emitted back to back merge into a different marker:
+  // `a _b and _c` produced `__`, which reads as strong and nested an em inside
+  // an em. Collapse each run to one closer. Non-adjacent repeats are left alone,
+  // since `_a **b _c` legitimately closes `_`, `**`, `_`.
+  for (let ci = closable.length - 1; ci > 0; ci--) {
+    if (closable[ci] === closable[ci - 1]) closable.splice(ci, 1)
   }
 
   let suffix = ''

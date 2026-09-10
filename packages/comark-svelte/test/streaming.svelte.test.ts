@@ -89,6 +89,29 @@ describe('streaming mode', () => {
     await expect.element(screen.getByText('Hello world')).toBeInTheDocument()
   })
 
+  // The `streaming` prop has to reach the parser, not just the renderer: auto-close
+  // heals only on a streaming parse, so these pass no `options.autoClose`.
+  // Asserted on markup rather than text, because 'wor' is a substring of '**wor'.
+  it('heals incomplete bold from the streaming prop alone', async () => {
+    const screen = await render(Markdown, {
+      value: 'Hello **wor',
+      streaming: true,
+    })
+
+    await expect.poll(() => screen.container.innerHTML).toContain('<strong>')
+    expect(screen.container.innerHTML).not.toContain('**wor')
+  })
+
+  it('leaves incomplete bold alone when not streaming', async () => {
+    const screen = await render(Markdown, {
+      value: 'Hello **wor',
+      streaming: false,
+    })
+
+    await expect.poll(() => screen.container.innerHTML).toContain('**wor')
+    expect(screen.container.innerHTML).not.toContain('<strong>')
+  })
+
   it('handles incomplete heading during streaming', async () => {
     const screen = await render(Markdown, {
       value: '# Hell',

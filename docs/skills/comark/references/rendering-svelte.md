@@ -330,7 +330,7 @@ The `caret` prop appends a blinking cursor indicator to the last text node durin
 <Markdown value={content} streaming={isStreaming} caret={{ class: 'my-caret' }} />
 ```
 
-`autoClose` is enabled by default: incomplete syntax like `**bold text` is automatically closed on every parse.
+`autoClose` defaults to `'streaming'`: incomplete syntax like `**bold text` is closed when the `streaming` prop is set, and left as written otherwise.
 
 ---
 

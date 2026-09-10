@@ -72,7 +72,9 @@ hi
 describe('ParserOptions.tracer', () => {
   it('records phase and per-plugin spans in pipeline order', async () => {
     const { tracer, spans } = createRecorder()
-    const parse = createMarkdownParser({ tracer })
+    // `autoClose: true` forces healing on a non-streaming parse so the
+    // `comark:autoclose` span is recorded; the default only heals while streaming.
+    const parse = createMarkdownParser({ tracer, autoClose: true })
     const tree = await parse(markdown)
 
     expect(tree.frontmatter).toEqual({ title: 'Hello' })

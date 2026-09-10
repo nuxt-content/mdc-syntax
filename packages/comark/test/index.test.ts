@@ -52,6 +52,12 @@ interface TestCase {
     highlight?: ShikiOptions
     plugins?: PluginName[]
     autoUnwrap?: boolean
+    /**
+     * Fixtures never stream, so the `'streaming'` default leaves input untouched
+     * and the corpus reads as a conformance suite. Set `true` for a fixture that
+     * is specifically about healing.
+     */
+    autoClose?: boolean | 'streaming'
     maxInlineAttributes?: number
     blockAttributesStyle?: 'frontmatter' | 'codeblock'
   }
@@ -248,6 +254,10 @@ describe('Comark Tests', () => {
 
         const parseOptions: ParserOptions = {
           autoUnwrap: testCase.options?.autoUnwrap === false ? false : true,
+        }
+
+        if (testCase.options?.autoClose !== undefined) {
+          parseOptions.autoClose = testCase.options.autoClose
         }
 
         if (plugins.length > 0) {

@@ -462,11 +462,26 @@ export interface ParserOptions<TPlugins extends readonly ComarkPlugin<any, any>[
   unwrap?: boolean | string | string[]
 
   /**
-   * Whether to automatically close unclosed markdown and Comark components,
-   * or a custom function that rewrites incomplete markdown before tokenization.
-   * @default true
+   * Controls healing of incomplete markdown and Comark components before
+   * tokenization.
+   *
+   * - `'streaming'` (default) heals only when the parse is called with
+   *   `{ streaming: true }`. A plain `parseMarkdown(md)` follows CommonMark, so
+   *   `a _b` stays literal text.
+   * - `true` heals on every parse. Use it when the input is a complete string
+   *   that may have been cut off, such as a stored partial AI response.
+   * - `false` never heals.
+   * - An {@link AutoCloseFunction} replaces the built-in healer and runs on
+   *   every parse, streaming or not.
+   *
+   * @default 'streaming'
+   * @example
+   * // Default: CommonMark on a plain parse, healed while streaming
+   * await parseMarkdown('a _b')                           // 'a _b'
+   * await parseMarkdown('a _b', {}, { streaming: true })  // <em>b</em>
+   * await parseMarkdown('a _b', { autoClose: true })      // <em>b</em>
    */
-  autoClose?: boolean | AutoCloseFunction
+  autoClose?: boolean | 'streaming' | AutoCloseFunction
 
   /**
    * @deprecated Use `registerDefaultPlugins: false` and register plugins explicitly

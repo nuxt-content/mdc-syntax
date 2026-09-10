@@ -517,7 +517,7 @@ describe('functionUnderTest', () => {
 ```typescript
 const result = await parseMarkdown(markdownContent, {
   autoUnwrap: true,             // Remove <p> wrappers from single-paragraph containers
-  autoClose: true,              // Auto-close incomplete syntax; also accepts (markdown) => string
+  autoClose: 'streaming',       // Heal incomplete syntax while streaming; `true` heals every parse, also accepts (markdown) => string
   unwrap: 'p',                  // Strip top-level wrapper tags (MDC unwrap); merges paragraphs
   registerDefaultPlugins: true, // frontmatter, html, alert, task-list, components, attributes; false to disable
 })

@@ -35,7 +35,14 @@ function MarkdownContent({
   )
 }
 
-export function MarkdownClient({ children, value, options = {}, plugins = [], ...rest }: MarkdownProps) {
+export function MarkdownClient({
+  children,
+  value,
+  options = {},
+  plugins = [],
+  streaming = false,
+  ...rest
+}: MarkdownProps) {
   const content = isMarkdownDocument(value)
     ? value
     : children
@@ -46,8 +53,13 @@ export function MarkdownClient({ children, value, options = {}, plugins = [], ..
   // Note: options/plugins should be stable references (defined outside render or memoized).
   // Pre-parsed documents resolve immediately without calling parseMarkdown().
   const parsePromise = useMemo(
-    () => (isMarkdownDocument(content) ? Promise.resolve(content) : parseMarkdown(content, { ...options, plugins })),
-    [content]
+    () =>
+      isMarkdownDocument(content)
+        ? Promise.resolve(content)
+        : // `streaming` must reach the parser, not just the renderer: it drives
+          // auto-close healing and incremental node reuse.
+          parseMarkdown(content, { ...options, plugins }, { streaming }),
+    [content, streaming]
   )
 
   // Keep showing the previous parsed result while a new parse is pending —
@@ -58,6 +70,7 @@ export function MarkdownClient({ children, value, options = {}, plugins = [], ..
     <Suspense fallback={null}>
       <MarkdownContent
         parsePromise={deferredPromise}
+        streaming={streaming}
         {...rest}
       />
     </Suspense>

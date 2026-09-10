@@ -82,7 +82,7 @@ describe('nested component with a run of blank lines between siblings', () => {
     )
 
     it('still terminates at the next `#slot` marker regardless of a preceding blank run', async () => {
-      const src = '::outer\n  #title\n  Hello\n\n\n  #footer\n  Bye\n  ::\n::'
+      const src = '::outer\n  #title\n  Hello\n\n\n  #footer\n  Bye\n  ::'
       const tree = await parseMarkdown(src)
       expect(tree.nodes).toEqual([
         ['outer', {}, ['template', { name: 'title' }, 'Hello'], ['template', { name: 'footer' }, 'Bye']],
@@ -90,7 +90,7 @@ describe('nested component with a run of blank lines between siblings', () => {
     })
 
     it('still terminates at the parent close after a blank run (no over-absorption)', async () => {
-      const src = '::outer\n  #title\n  Hello\n\n\n  ::\nafter\n::'
+      const src = '::outer\n  #title\n  Hello\n\n\n  ::\nafter'
       const tree = await parseMarkdown(src)
       expect(tree.nodes).toEqual([
         ['outer', {}, ['template', { name: 'title' }, 'Hello']],
