@@ -173,7 +173,7 @@ Text before the comment and text after the comment both render normally.
 </script>
 
 <Markdown
-  {markdown}
+  value={markdown}
   plugins={[shiki({ languages: [python] })]}
   components={{ Alert }}
   {componentsManifest}

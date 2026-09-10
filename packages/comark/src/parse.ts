@@ -124,7 +124,7 @@ export function createMarkdownParser<const TPlugins extends readonly ComarkPlugi
 
       const prevOutput = lastOutput
       const isStartsWithLastInput = markdown.startsWith(lastInput ?? '')
-      if (opts.streaming && prevOutput && isStartsWithLastInput) {
+      if (opts.streaming && prevOutput && isStartsWithLastInput && !markdown.includes(']:')) {
         const { remainingMarkdownStartLine, reusedNodes, remainingMarkdown } = extractReusableNodes(
           markdown,
           prevOutput
@@ -133,9 +133,12 @@ export function createMarkdownParser<const TPlugins extends readonly ComarkPlugi
         // If there is no remaining markdown, return the previous output
         if (!remainingMarkdown) return prevOutput
 
-        state.parsedLines = remainingMarkdownStartLine
-        state.markdown = remainingMarkdown
-        state.reusableNodes = reusedNodes
+        // Heading IDs and reference links depend on the full document.
+        if (!/#|(?:^|\n)[^\n]*[=-][ \t]*\r?(?:\n|$)/.test(remainingMarkdown)) {
+          state.parsedLines = remainingMarkdownStartLine
+          state.markdown = remainingMarkdown
+          state.reusableNodes = reusedNodes
+        }
       }
 
       if (typeof autoClose === 'function') {
@@ -191,7 +194,8 @@ export function createMarkdownParser<const TPlugins extends readonly ComarkPlugi
 
       if (opts.streaming) {
         state.tree = {
-          frontmatter: frontmatterText ? frontmatterData : (prevOutput?.frontmatter ?? frontmatterData),
+          frontmatter:
+            frontmatterText || !isStartsWithLastInput ? frontmatterData : (prevOutput?.frontmatter ?? frontmatterData),
           meta: {},
           nodes: [...state.reusableNodes, ...nodes],
         }

@@ -3,6 +3,31 @@ import { createMarkdownParser } from 'comark'
 import type { ElementNode } from 'comark'
 
 describe('streaming mode', () => {
+  it.each([false, true])('omits reference definitions with streaming: %s', async (streaming) => {
+    const result = await createMarkdownParser()('# Heading\n\n[ref]: https://example.com\n\n[link][ref]', { streaming })
+    expect(result.nodes).toMatchObject([
+      ['h1', {}, 'Heading'],
+      ['p', {}, ['a', { href: 'https://example.com' }, 'link']],
+    ])
+  })
+
+  it.each([
+    ['duplicate headings', '# Same\n\nIntro\n\n# Same', '\n\nTail'],
+    ['nested headings', '## Parent\n\nIntro\n\n### Child', '\n\nTail'],
+    ['setext headings', 'Same\n====\n\nIntro\n\nSame\n====', '\n\nTail'],
+    ['CRLF setext headings', 'Same\r\n====\r\n\r\nIntro\r\n\r\nSame\r\n====', '\r\n\r\nTail'],
+    ['headings in lists', '# Same\n\nIntro\n\n- # Same', '\n\nTail'],
+    ['existing references', '[ref]: https://example.com\n\n# Heading\n\nIntro\n\n[link][ref]', ' grows'],
+    ['new references', '[link][ref]\n\nIntro\n\nTail', '\n\n[ref]: https://example.com'],
+  ])('matches a full parse after appending to %s', async (_, source, appended) => {
+    const parse = createMarkdownParser()
+    await parse(source, { streaming: true })
+
+    const result = await parse(source + appended, { streaming: true })
+
+    expect(result).toMatchObject(await createMarkdownParser()(source + appended))
+  })
+
   describe('$.line metadata', () => {
     it('preserves position metadata on nodes in streaming mode', async () => {
       const parse = createMarkdownParser()
@@ -189,6 +214,18 @@ describe('streaming mode', () => {
 
       expect(result1.frontmatter).toEqual({ title: 'Hello' })
       expect(result2.frontmatter).toEqual({ title: 'Hello' })
+    })
+
+    it.each([
+      ['without frontmatter', '# Replacement', {}],
+      ['with new frontmatter', '---\ntitle: New\n---\n\n# Replacement', { title: 'New' }],
+    ])('replaces stream frontmatter when the source changes %s', async (_, replacement, frontmatter) => {
+      const parse = createMarkdownParser()
+      await parse('---\ntitle: Old\n---\n\n# Original', { streaming: true })
+
+      const result = await parse(replacement, { streaming: true })
+
+      expect(result.frontmatter).toEqual(frontmatter)
     })
   })
 

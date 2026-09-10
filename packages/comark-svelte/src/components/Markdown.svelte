@@ -25,8 +25,8 @@ This is an alert component
 -->
 <script lang="ts">
   import type { MarkdownDocument as MarkdownDocumentType, ComarkPlugin, ComponentManifest } from 'comark'
-  import { parseMarkdown } from 'comark'
   import { isMarkdownDocument } from 'comark/utils'
+  import { createComponentParser } from '../internal/parse'
   import MarkdownDocument from './MarkdownDocument.svelte'
 
   let {
@@ -56,21 +56,27 @@ This is an alert component
   let parsed: MarkdownDocumentType | null = $state(null)
 
   let content = $derived(typeof value === 'string' ? value.trim() : '')
+  // Compare config values before creating a parser when parent props are spread.
+  let parserOptions = $derived(options)
+  let parserPlugins = $derived(plugins)
+  let parserUnwrap = $derived(unwrap)
+  let parse = $derived(createComponentParser({
+    ...parserOptions,
+    ...(parserUnwrap ? { unwrap: parserUnwrap } : {}),
+    plugins: [...parserPlugins],
+  }))
 
-  let requestVersion = 0
-  let appliedVersion = 0
+  let isDocument = $derived(isMarkdownDocument(value))
   $effect(() => {
-    if (isMarkdownDocument(value)) return
-    const currentVersion = ++requestVersion
-    // `parse` directly mutates `plugins` which creates an infinite effect loop
-    // so we copy it before passing it in so it gets a regular JS array and we get to still
-    // track dependencies from an external perspective
-    parseMarkdown(content, { ...options, ...(unwrap ? { unwrap } : {}), plugins: [...plugins] }).then((result) => {
-      if (currentVersion > appliedVersion) {
-        appliedVersion = currentVersion
-        parsed = result
-      }
+    if (isDocument) return
+    const parseMarkdown = parse
+    let active = true
+    $effect(() => {
+      parseMarkdown(content, { streaming }).then((result) => {
+        if (active) parsed = result
+      })
     })
+    return () => { active = false }
   })
 </script>
 

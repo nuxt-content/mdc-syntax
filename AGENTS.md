@@ -255,6 +255,7 @@ packages/comark-svelte/
 ├── src/
 │   ├── index.ts              # Entry point (@comark/svelte)
 │   ├── types.ts              # Shared prop interfaces
+│   ├── internal/parse.ts     # Serialized incremental parser, preserving plugin errors
 │   ├── components/
 │   │   ├── Markdown.svelte       # High-level markdown → render ($state + $effect)
 │   │   ├── MarkdownDocument.svelte # Low-level AST → render component

@@ -299,6 +299,8 @@ function processBlockToken(
 ): { node: Node | null; nextIndex: number } {
   const token = tokens[startIndex]
 
+  if (token.type === 'reference') return { node: null, nextIndex: startIndex + 1 }
+
   if (token.type === 'hr') {
     return { node: ['hr', {}] as Node, nextIndex: startIndex + 1 }
   }

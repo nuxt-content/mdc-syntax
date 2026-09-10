@@ -59,6 +59,8 @@ Heads up!
 
 ### Streaming
 
+`Markdown` and `MarkdownAsync` reuse completed blocks while `streaming` is true. Set it to false when the stream ends to run a final full parse. Changes to `options`, `plugins`, or `unwrap` create a new parser. Heading tails and reference definitions use a full parse to preserve heading IDs and links.
+
 ```svelte
 <Markdown value={content} streaming={isStreaming} caret />
 ```
