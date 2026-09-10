@@ -10,13 +10,14 @@ import {
 
 export type {
   CodeBlockAttributes,
+  ShikiGrammarContext,
   HighlightOptions,
   ShikiCoreOptions,
   ShikiLanguageLoader,
   ShikiOptions,
   ShikiThemeLoader,
 } from '../../internal/shiki.ts'
-export { resetHighlighter } from '../../internal/shiki.ts'
+export { defaultGrammarContexts, resetHighlighter } from '../../internal/shiki.ts'
 export { comarkLanguage, comarkLanguages } from './language-comark.ts'
 
 const shiki = createShikiPlugin<ShikiCoreOptions>()

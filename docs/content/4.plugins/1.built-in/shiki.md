@@ -196,6 +196,46 @@ const x: number = 42
 ```
 ````
 
+### Inline code
+
+Inline code is highlighted when it declares a language with the attributes syntax. `lang` wins over `language`:
+
+```markdown
+The type is `Ref<HTMLInputElement | null>`{lang="ts-type"} and the component is `<UButton />`{lang="vue-html"}.
+```
+
+Inline code uses the fast token path only, so `transformers` and `preStyles` are block-only and are not applied. The node gets the same `shiki` class a `<pre>` gets, so the dual-theme CSS in [Styling](#styling) covers it without extra rules.
+
+Inline code naming a grammar that is not registered is left exactly as it was written, with no class and no spans. That is deliberate: `lang` is a real HTML attribute for natural language, so `` `Bonjour`{lang="fr"} `` must not be treated as code. A fenced block behaves differently and still falls back to an unhighlighted `.shiki` block, because a `<pre>` is unambiguously code.
+
+Set `inlineCode: false` to turn this off.
+
+### Grammar contexts
+
+Some inline snippets are fragments rather than whole statements, so the grammar needs seeding before it tokenizes them correctly. A grammar context maps a name you write in `{lang="…"}` onto a real grammar plus source that is tokenized and then discarded.
+
+Two ship by default, mirroring the `@nuxtjs/mdc` conventions:
+
+| Name | Grammar | Seed |
+|---|---|---|
+| `ts-type` | `typescript` | `let a:` |
+| `vue-html` | `vue` | `<template>` |
+
+Without the `ts-type` seed, `Ref<HTMLInputElement | null>` tokenizes as an expression and the type names fall through to plain text.
+
+Add your own with `grammarContexts`, or set an entry to `false` to drop a built-in and treat the name as a plain grammar name:
+
+```ts
+shiki({
+  grammarContexts: {
+    'sql-expr': { lang: 'sql', grammarContextCode: 'select ' },
+    'ts-type': false,
+  },
+})
+```
+
+Contexts apply to fence info strings too. The written name stays on the `<pre>`, so ```` ```ts-type ```` still round-trips. On the `core` entry the target grammar has to be registered through `languages` like any other.
+
 ### Line highlighting
 
 Highlight specific lines using `{line-numbers}` syntax:
@@ -304,6 +344,8 @@ Two option types, one per entry:
 | [`languages`](#options-languages) | `Array<LanguageRegistration \| LanguageRegistration[]>` | `undefined` | Extra languages (merged onto the default set) |
 | [`transformers`](#options-transformers) | `ShikiTransformer[]` | `undefined` | Shiki transformers applied to every block |
 | [`preStyles`](#options-prestyles) | `boolean` | `false` | Add inline background/foreground styles to `<pre>` |
+| [`inlineCode`](#options-inlinecode) | `boolean` | `true` | Highlight inline code that declares a language |
+| [`grammarContexts`](#options-grammarcontexts) | `Record<string, ShikiGrammarContext \| false>` | Built-ins | Pseudo-languages merged over `ts-type` and `vue-html` |
 | [`registerDefaultLanguages`](#options-registerdefaultlanguages) | `boolean` | `true` | Register the built-in default language set |
 | [`registerDefaultThemes`](#options-registerdefaultthemes) | `boolean` | `true` | Register the built-in Material themes |
 
@@ -315,6 +357,8 @@ Two option types, one per entry:
 | `languages` | `Array<LanguageRegistration \| LanguageRegistration[]>` | **required** | Languages to register |
 | `transformers` | `ShikiTransformer[]` | `undefined` | Shiki transformers applied to every block |
 | `preStyles` | `boolean` | `false` | Add inline background/foreground styles to `<pre>` |
+| `inlineCode` | `boolean` | `true` | Highlight inline code that declares a language |
+| `grammarContexts` | `Record<string, ShikiGrammarContext \| false>` | Built-ins | Pseudo-languages merged over `ts-type` and `vue-html` |
 
 ### `themes`
 
@@ -383,6 +427,36 @@ shiki({ preStyles: true })
 ```
 
 **Default:** `false`
+
+Block-only. Inline code never receives inline styles, so a user-authored `` `x`{style="…"} `` survives the round-trip.
+
+### `inlineCode`
+
+Whether to highlight inline code that declares a language, e.g. `` `Ref<T>`{lang="ts-type"} ``. See [Inline code](#inline-code).
+
+```typescript
+shiki({ inlineCode: false })
+```
+
+**Default:** `true`
+
+### `grammarContexts`
+
+Pseudo-languages usable in `{lang="…"}` and in fence info strings, merged on top of the built-in `ts-type` and `vue-html`. See [Grammar contexts](#grammar-contexts).
+
+```typescript
+import shiki, { defaultGrammarContexts } from 'comark/plugins/shiki'
+
+shiki({
+  grammarContexts: {
+    'sql-expr': { lang: 'sql', grammarContextCode: 'select ' },
+  },
+})
+```
+
+Each entry is `{ lang, grammarContextCode? }`, or `false` to drop a built-in. `defaultGrammarContexts` is exported so you can see what you are extending.
+
+**Default:** the built-in contexts
 
 ### `registerDefaultLanguages`
 
@@ -487,6 +561,8 @@ Browser-side twoslash with CDN-fetched TypeScript types and interactive type pop
 ## Styling
 
 Shiki outputs tokens as `<span class="line">` elements inside a `<pre class="shiki">` block.
+
+Highlighted inline code gets the same `shiki` class on the `<code>` element, with the token spans directly inside it and no `.line` wrapper. Rules written against `.shiki span` therefore cover both. Use `pre.shiki` when a rule should apply to blocks only.
 
 ### Line highlight
 

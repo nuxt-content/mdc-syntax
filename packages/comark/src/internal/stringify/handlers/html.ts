@@ -1,6 +1,6 @@
 import type { State } from 'comark/render'
 import type { ElementNode } from 'comark'
-import { htmlAttributes } from '../attributes.ts'
+import { htmlAttributes, mergeHighlighterClass } from '../attributes.ts'
 import { indent } from '../../../utils/index.ts'
 
 const textBlocks = new Set(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'td', 'th'])
@@ -99,7 +99,15 @@ export async function html(node: ElementNode, state: State, parent?: ElementNode
     state.applyContext(revert)
   }
 
-  const attrs = Object.keys(attributes).length > 0 ? ` ${htmlAttributes(attributes)}` : ''
+  // The ` . ` separator between a highlighter's injected classes and the user's
+  // is a markdown-stringify encoding, so collapse it before it reaches HTML.
+  // Copied rather than mutated: `attributes` may be `state.renderData.props`.
+  const htmlAttrs =
+    typeof (attributes as Record<string, unknown>).class === 'string'
+      ? { ...attributes, class: mergeHighlighterClass((attributes as Record<string, unknown>).class) }
+      : attributes
+
+  const attrs = Object.keys(htmlAttrs).length > 0 ? ` ${htmlAttributes(htmlAttrs)}` : ''
 
   if (isSelfClose) {
     return `<${tag}${attrs}>` + (!parent && !isInline ? state.context.blockSeparator : '')

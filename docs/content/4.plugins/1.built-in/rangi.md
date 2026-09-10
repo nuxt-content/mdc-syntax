@@ -35,6 +35,8 @@ npm install rangi
 Use [`comark/plugins/shiki`](/plugins/built-in/shiki) when you need transformers, Twoslash, or the full VS Code grammar set. Use `rangi` for a faster, smaller highlighter with built-in light/dark themes.
 ::
 
+Inline code highlighting with `{lang="…"}` is currently shiki only. Rangi highlights fenced blocks.
+
 ## Usage
 
 ```typescript
