@@ -8,8 +8,8 @@ import {
   Type,
   inject,
 } from '@angular/core'
-import { createSerializedMarkdownParser } from 'comark'
-import type { ParserOptions, MarkdownDocument as MarkdownDocumentType } from 'comark'
+import { createSerializedMarkdownParser, getMarkdownParser } from 'comark'
+import type { ParserOptions, ComarkParseFn, MarkdownDocument as MarkdownDocumentType } from 'comark'
 import { isMarkdownDocument } from 'comark/utils'
 import { MarkdownDocument } from './markdown-document.component.ts'
 
@@ -71,19 +71,33 @@ export class Markdown implements OnChanges {
   /** Additional data to pass to the renderer for :binding resolution */
   @Input() data: Record<string, unknown> = {}
 
+  /** Parser to use instead of one resolved from `options` and `plugins` */
+  @Input() parser?: ComarkParseFn
+
   document: MarkdownDocumentType | null = null
 
-  private serializedParse = createSerializedMarkdownParser({})
+  private serializedParse: ComarkParseFn = getMarkdownParser({})
 
   private cdr = inject(ChangeDetectorRef)
 
+  /**
+   * Streaming keeps incremental state inside the parser closure, and every
+   * non-streaming parse resets it, so a streaming instance must own its parser.
+   * Non-streaming instances share one, which is where the win is.
+   */
+  private resolveParser(): ComarkParseFn {
+    if (this.parser) return this.parser
+    const parseOptions = {
+      ...this.options,
+      ...(this.unwrap ? { unwrap: this.unwrap } : {}),
+      plugins: this.plugins,
+    }
+    return this.streaming ? createSerializedMarkdownParser(parseOptions) : getMarkdownParser(parseOptions)
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['options'] || changes['plugins'] || changes['unwrap']) {
-      this.serializedParse = createSerializedMarkdownParser({
-        ...this.options,
-        ...(this.unwrap ? { unwrap: this.unwrap } : {}),
-        plugins: this.plugins,
-      })
+    if (changes['options'] || changes['plugins'] || changes['unwrap'] || changes['streaming'] || changes['parser']) {
+      this.serializedParse = this.resolveParser()
     }
     if (
       changes['value'] ||

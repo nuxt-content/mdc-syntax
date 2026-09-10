@@ -23,6 +23,8 @@ import { applyUnwrap, resolveUnwrapTags } from './internal/parse/unwrap.ts'
 import { marmdownItTokensToMarkdownDocument } from './internal/parse/token-processor.ts'
 import { autoCloseMarkdown } from './internal/parse/auto-close/index.ts'
 import { extractReusableNodes } from './internal/parse/incremental.ts'
+import { resolveCache, withDocumentCache } from './internal/parse/cache.ts'
+import { parserKey } from './internal/parse/parser-key.ts'
 import { createSerializedTask, dedupePlugins } from './utils/helpers.ts'
 import { noopTracer, withSpan } from './utils/trace.ts'
 
@@ -218,7 +220,76 @@ export function createMarkdownParser<const TPlugins extends readonly ComarkPlugi
     })
   }
 
-  return parseFn as ComarkParseFn<
+  const cache = resolveCache(options.cache)
+
+  return (cache ? withDocumentCache(parseFn, cache) : parseFn) as ComarkParseFn<
+    ResolvedMeta<MergePluginMeta<TPlugins>>,
+    ResolvedFrontmatter<MergePluginFrontmatter<TPlugins>>
+  >
+}
+
+/** Bound on how many distinct configurations keep a shared parser alive. */
+const MAX_SHARED_PARSERS = 32
+const sharedParsers = new Map<string, ComarkParseFn>()
+
+function warnOnSharedStreaming(parse: ComarkParseFn): ComarkParseFn {
+  let warned = false
+  return (markdown, opts) => {
+    if (opts?.streaming && !warned) {
+      warned = true
+      console.warn(
+        '[comark] streaming parse on a parser from `getMarkdownParser()`. Shared parsers hold one ' +
+          'incremental state, so another consumer can corrupt or reset it. Use `createMarkdownParser()` ' +
+          'or `createSerializedMarkdownParser()` for streaming.'
+      )
+    }
+    return parse(markdown, opts)
+  }
+}
+
+/**
+ * Returns a parser shared by every caller with equivalent options, building it
+ * on first use. Prefer this over `createMarkdownParser()` when many callers
+ * parse with the same configuration: building a parser runs every plugin
+ * factory and registers them on a fresh markdown-it instance, which dominates
+ * the cost of parsing short documents.
+ *
+ * Equivalence is structural for primitive options and by identity for
+ * `plugins`, `autoClose`, `tracer` and `cache`, so create plugin instances once
+ * rather than inline on every render.
+ *
+ * Shared parsers are for non-streaming parses. Streaming keeps incremental
+ * state on the parser, and every non-streaming parse resets it, so a streaming
+ * consumer must own its parser.
+ *
+ * @example
+ * ```typescript
+ * import { getMarkdownParser } from 'comark'
+ *
+ * const tree = await getMarkdownParser({ plugins })(markdown)
+ * ```
+ */
+export function getMarkdownParser<const TPlugins extends readonly ComarkPlugin<any, any>[] = []>(
+  options: ParserOptions<TPlugins> = {} as ParserOptions<TPlugins>
+): ComarkParseFn<ResolvedMeta<MergePluginMeta<TPlugins>>, ResolvedFrontmatter<MergePluginFrontmatter<TPlugins>>> {
+  const key = parserKey(options as Record<string, unknown>)
+  let parser = sharedParsers.get(key)
+
+  if (parser) {
+    // Touch, so the least recently used configuration is the one evicted.
+    sharedParsers.delete(key)
+    sharedParsers.set(key, parser)
+  } else {
+    // Copied: the parser closes over `options` and exposes it to plugins as
+    // `state.options`, so a caller must not be able to mutate it afterwards.
+    parser = warnOnSharedStreaming(createMarkdownParser({ ...options } as ParserOptions))
+    sharedParsers.set(key, parser)
+    if (sharedParsers.size > MAX_SHARED_PARSERS) {
+      sharedParsers.delete(sharedParsers.keys().next().value!)
+    }
+  }
+
+  return parser as ComarkParseFn<
     ResolvedMeta<MergePluginMeta<TPlugins>>,
     ResolvedFrontmatter<MergePluginFrontmatter<TPlugins>>
   >
@@ -263,9 +334,7 @@ export async function parseMarkdown<const TPlugins extends readonly ComarkPlugin
 ): Promise<
   MarkdownDocument<ResolvedMeta<MergePluginMeta<TPlugins>>, ResolvedFrontmatter<MergePluginFrontmatter<TPlugins>>>
 > {
-  const parser = createMarkdownParser(options)
-
-  return await parser(markdown)
+  return await getMarkdownParser(options)(markdown)
 }
 
 /**

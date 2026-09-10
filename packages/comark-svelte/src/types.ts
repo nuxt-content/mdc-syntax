@@ -1,4 +1,4 @@
-import type { Node, MarkdownDocument, ComarkPlugin, ComponentManifest, ParserOptions } from 'comark'
+import type { Node, MarkdownDocument, ComarkPlugin, ComponentManifest, ParserOptions, ComarkParseFn } from 'comark'
 import type { Component, Snippet } from 'svelte'
 
 export interface ComponentResolverProps {
@@ -39,6 +39,11 @@ export interface MarkdownProps {
   value?: string | MarkdownDocument
   options?: Exclude<ParserOptions, 'plugins'>
   plugins?: ComarkPlugin[]
+
+  /**
+   * Parser to use instead of one resolved from `options` and `plugins`
+   */
+  parser?: ComarkParseFn
   /**
    * Strip wrapper tags from the top level of the document — shorthand for
    * `options.unwrap`. `true` unwraps `<p>`; a space-separated string or array

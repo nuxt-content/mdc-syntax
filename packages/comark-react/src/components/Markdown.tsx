@@ -1,5 +1,6 @@
 import React from 'react'
-import { parseMarkdown } from 'comark'
+import { getMarkdownParser } from 'comark'
+import type { ComarkParseFn } from 'comark'
 import type { MarkdownDocument as MarkdownDocumentType, ParserOptions } from 'comark'
 import { isMarkdownDocument } from 'comark/utils'
 import { MarkdownDocument } from './MarkdownDocument.tsx'
@@ -20,6 +21,11 @@ export interface MarkdownProps {
    * Parser options (excluding plugins)
    */
   options?: Exclude<ParserOptions, 'plugins'>
+
+  /**
+   * Parser to use instead of one resolved from `options` and `plugins`
+   */
+  parser?: ComarkParseFn
 
   /**
    * Additional plugins to use
@@ -107,6 +113,7 @@ export async function Markdown({
   value,
   options = {},
   plugins = [],
+  parser,
   unwrap = false,
   components: customComponents = {},
   componentsManifest,
@@ -141,6 +148,7 @@ export async function Markdown({
         value={source}
         options={parseOptions}
         plugins={plugins}
+        parser={parser}
         components={customComponents}
         componentsManifest={componentsManifest}
         streaming={streaming}
@@ -151,7 +159,7 @@ export async function Markdown({
     )
   }
 
-  const parsed = await parseMarkdown(source, { ...parseOptions, plugins })
+  const parsed = await (parser ?? getMarkdownParser({ ...parseOptions, plugins }))(source)
 
   return (
     <MarkdownDocument

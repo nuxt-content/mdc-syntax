@@ -509,6 +509,25 @@ export interface ParserOptions<TPlugins extends readonly ComarkPlugin<any, any>[
   registerDefaultPlugins?: boolean
 
   /**
+   * Memoize parse results by source string, per parser instance.
+   *
+   * - `false` (default) never caches
+   * - `true` uses a bounded LRU of 200 documents
+   * - a number sets that bound (`0` disables)
+   * - a store brings your own, e.g. `new Map()` or an `lru-cache`
+   *
+   * Off by default on purpose: a parser usually outlives a request on the
+   * server, and retained documents would be invisible to the caller. Parses
+   * made with `{ streaming: true }` are never cached.
+   *
+   * Documents handed back by a cached parser are shared between callers, so
+   * treat them as immutable.
+   *
+   * @default false
+   */
+  cache?: boolean | number | ComarkDocumentCache
+
+  /**
    * Additional plugins to use. A plugin with the same name as a default plugin
    * replaces that default and runs, in user-defined order, after the remaining defaults.
    * Duplicate user plugins keep their first occurrence.
@@ -534,6 +553,16 @@ export interface ParserOptions<TPlugins extends readonly ComarkPlugin<any, any>[
  * Type signature for the options object passed to the Comark parser function returned by createMarkdownParser().
  */
 export type ComarkParseFnOptions = { streaming?: boolean }
+
+/**
+ * Store used to memoize parse results by source string. Map-compatible, so a
+ * plain `new Map()` and an `lru-cache` instance both satisfy it.
+ */
+export interface ComarkDocumentCache {
+  get(source: string): Promise<MarkdownDocument<any, any>> | undefined
+  set(source: string, document: Promise<MarkdownDocument<any, any>>): void
+  delete(source: string): void
+}
 
 /**
  * Type signature for the async Comark parser function returned by createMarkdownParser().

@@ -25,7 +25,8 @@ This is an alert component
 -->
 <script lang="ts">
   import type { MarkdownDocument as MarkdownDocumentType, ComarkPlugin, ComponentManifest } from 'comark'
-  import { parseMarkdown } from 'comark'
+  import { createSerializedMarkdownParser, getMarkdownParser } from 'comark'
+  import type { ComarkParseFn } from 'comark'
   import { isMarkdownDocument } from 'comark/utils'
   import MarkdownDocument from './MarkdownDocument.svelte'
 
@@ -33,6 +34,7 @@ This is an alert component
     value,
     options = {},
     plugins = [],
+    parser,
     unwrap = false,
     components = {},
     componentsManifest,
@@ -57,6 +59,15 @@ This is an alert component
 
   let content = $derived(typeof value === 'string' ? value.trim() : '')
 
+  // Streaming keeps incremental state inside the parser closure, and every
+  // non-streaming parse resets it, so a streaming instance must own its parser.
+  // Non-streaming instances share one, which is where the win is.
+  function resolveParser() {
+    if (parser) return parser
+    const parseOptions = { ...options, ...(unwrap ? { unwrap } : {}), plugins: [...plugins] }
+    return streaming ? createSerializedMarkdownParser(parseOptions) : getMarkdownParser(parseOptions)
+  }
+
   let requestVersion = 0
   let appliedVersion = 0
   $effect(() => {
@@ -65,7 +76,7 @@ This is an alert component
     // `parse` directly mutates `plugins` which creates an infinite effect loop
     // so we copy it before passing it in so it gets a regular JS array and we get to still
     // track dependencies from an external perspective
-    parseMarkdown(content, { ...options, ...(unwrap ? { unwrap } : {}), plugins: [...plugins] }).then((result) => {
+    resolveParser()(content).then((result) => {
       if (currentVersion > appliedVersion) {
         appliedVersion = currentVersion
         parsed = result

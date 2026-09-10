@@ -7,10 +7,13 @@ import type { ComarkPlugin, ComarkPluginFactory } from '../types.ts'
 export function createSerializedTask<TArgs extends unknown[], TResult>(
   fn: (...args: TArgs) => Promise<TResult>
 ): (...args: TArgs) => Promise<TResult> {
-  let chain: Promise<TResult> = Promise.resolve(null as TResult)
+  let chain: Promise<unknown> = Promise.resolve()
   return (...args: TArgs) => {
-    chain = chain.then(() => fn(...args)).catch(() => null as TResult)
-    return chain
+    const result = chain.then(() => fn(...args))
+    // Keep the queue alive after a failure, but let this caller see it.
+    // Swallowing to `null` rendered an empty document with nothing in the console.
+    chain = result.catch(() => undefined)
+    return result
   }
 }
 
